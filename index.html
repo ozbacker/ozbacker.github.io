@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { background-color: #008080; font-family: "MS Sans Serif", Arial, sans-serif; }
+        
+        .window {
+            width: 300px;
+            background-color: #c0c0c0;
+            border: 2px outset #ffffff;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+            padding: 2px;
+            margin: 50px auto;
+        }
+
+        .title-bar {
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: white;
+            padding: 3px 5px;
+            font-weight: bold;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .window-body { padding: 15px; text-align: center; }
+
+        input {
+            width: 60px;
+            border: 2px inset #ffffff;
+            background: white;
+            padding: 3px;
+            margin-bottom: 10px;
+            font-family: monospace;
+        }
+
+        .retro-button {
+            background-color: #c0c0c0;
+            border: 2px outset #dfdfdf;
+            padding: 4px 15px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .retro-button:active { border-style: inset; }
+
+        #result, #quadResult, #lnResult, #sqrtApproxResult, #areaResult, #area3DResult, #reverseResult, #diagonalResult, #stdResult, #volumeResult, #trigResult, #distanceResult, #halfDoubleResult, #compoundResult, #binomialResult, #binomialExpand, #identityResult, #gcdLcmResult, #logResult, #matrixResult, #arcResult, #pytagorasResult, #functionResult {
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px dashed #808080;
+            min-height: 20px;
+            background: #e0e0e0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="window">
+    <div class="title-bar">
+        <span>SQRT_CONVERTER.EXE</span>
+        <span style="background:#c0c0c0; color:black; padding: 0 3px; border:1px outset white;">X</span>
+    </div>
+    <div class="window-body">
+        
+        <p>Convert a√b to √n:</p>
+        <input type="number" id="coeffA" value="3" style="width: 40px;"> 
+        √ <input type="number" id="radicB" value="2" style="width: 40px;">
+        <br>
+        <button class="retro-button" onclick="reverseSqrt()">Convert</button>
+        <div id="reverseResult">Result: ?</div>
+
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+
+        <p>Enter number (n):</p>
+        &radic; <input type="number" id="numInput" value="72">
+        <br>
+        <button class="retro-button" onclick="simplifySqrt()">Calculate</button>
+        <div id="result">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Solve quadratic: ax² + bx + c = 0</p>
+        a: <input type="number" id="aInput" value="1" style="width: 40px;">
+        b: <input type="number" id="bInput" value="2" style="width: 40px;">
+        c: <input type="number" id="cInput" value="-3" style="width: 40px;">
+        <br>
+        <button class="retro-button" onclick="solveQuadratic()">Solve</button>
+        <div id="quadResult">Roots: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Natural Logarithm: ln(x)</p>
+        x: <input type="number" id="lnInput" value="1" step="any" style="width: 60px;">
+        <br>
+        <button class="retro-button" onclick="calculateLn()">Calculate ln</button>
+        <div id="lnResult">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Degree / Radian Converter</p>
+        value: <input type="number" id="angleValue" value="180" step="any" style="width: 60px;">
+        <select id="angleMode" style="margin-left: 8px;">
+            <option value="deg2rad">deg → rad</option>
+            <option value="rad2deg">rad → deg</option>
+        </select>
+        <br>
+        <button class="retro-button" onclick="convertAngle()">Convert</button>
+        <div id="angleResult">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Approximate Square Root: √(n)</p>
+        n: <input type="number" id="sqrtApproxInput" value="2" step="any" style="width: 60px;">
+        <br>
+        <button class="retro-button" onclick="approximateSqrt()">Approximate</button>
+        <div id="sqrtApproxResult">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Triangle Area Calculator</p>
+        Method: <select id="areaMethod" onchange="toggleInputs()">
+            <option value="sides">By sides (Heron's formula)</option>
+            <option value="baseheight">By base and height</option>
+            <option value="angle">By two sides and included angle</option>
+            <option value="equilateral">Equilateral triangle</option>
+            <option value="right">Right triangle</option>
+        </select>
+        <div id="sidesInputs">
+            a: <input type="number" id="sideA" step="any" style="width: 50px;">
+            b: <input type="number" id="sideB" step="any" style="width: 50px;">
+            c: <input type="number" id="sideC" step="any" style="width: 50px;">
+        </div>
+        <div id="baseHeightInputs" style="display: none;">
+            Base: <input type="number" id="base" step="any" style="width: 50px;">
+            Height: <input type="number" id="height" step="any" style="width: 50px;">
+        </div>
+        <div id="angleInputs" style="display: none;">
+            a: <input type="number" id="sideA2" step="any" style="width: 50px;">
+            b: <input type="number" id="sideB2" step="any" style="width: 50px;">
+            Angle C (°): <input type="number" id="angleC" step="any" style="width: 50px;">
+        </div>
+        <div id="equilateralInputs" style="display: none;">
+            Side: <input type="number" id="equilateralSide" step="any" style="width: 50px;">
+        </div>
+        <div id="rightTriangleInputs" style="display: none;">
+            Leg a: <input type="number" id="legA2" step="any" style="width: 50px;">
+            Leg b: <input type="number" id="legB2" step="any" style="width: 50px;">
+        </div>
+        <br>
+        <button class="retro-button" onclick="calculateArea()">Calculate Area</button>
+        <div id="areaResult">Area: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Law of Cosines / Sines Calculator</p>
+        Mode: <select id="lawMode" onchange="updateLawMode()">
+            <option value="cosineSide">Cosines: side from two sides + included angle</option>
+            <option value="cosineAngle">Cosines: angle from three sides</option>
+            <option value="sineAngle">Sines: angle from opposite and hypotenuse</option>
+            <option value="sineSide">Sines: side from angle and hypotenuse</option>
+        </select>
+        <div id="cosineSideInputs" style="margin-top: 8px;">
+            a: <input type="number" id="lawA" step="any" style="width: 50px;">
+            b: <input type="number" id="lawB" step="any" style="width: 50px;">
+            Angle C (°): <input type="number" id="lawC" step="any" style="width: 50px;">
+        </div>
+        <div id="cosineAngleInputs" style="display: none; margin-top: 8px;">
+            a: <input type="number" id="lawA2" step="any" style="width: 50px;">
+            b: <input type="number" id="lawB2" step="any" style="width: 50px;">
+            c: <input type="number" id="lawC2" step="any" style="width: 50px;">
+        </div>
+        <div id="sineAngleInputs" style="display: none; margin-top: 8px;">
+            Opposite: <input type="number" id="lawOpp" step="any" style="width: 50px;">
+            Hypotenuse: <input type="number" id="lawHyp" step="any" style="width: 50px;">
+        </div>
+        <div id="sineSideInputs" style="display: none; margin-top: 8px;">
+            Angle A (°): <input type="number" id="lawAngleA" step="any" style="width: 50px;">
+            Hypotenuse: <input type="number" id="lawHyp2" step="any" style="width: 50px;">
+        </div>
+        <br>
+        <button class="retro-button" onclick="calculateTriangleLaw()">Calculate</button>
+        <div id="lawResult">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Mean Calculator</p>
+        Mode: <select id="meanMode">
+            <option value="arithmetic">Arithmetic mean</option>
+            <option value="geometric">Geometric mean</option>
+            <option value="harmonic">Harmonic mean</option>
+        </select>
+        <br>
+        values: <input type="text" id="meanValues" value="2,4,8" style="width: 180px;">
+        <div style="font-size: 11px; color: #202020; margin-top: 4px;">Supports expressions: √, sqrt(), pi, e, ^, +, -, *, /</div>
+        <br>
+        <button class="retro-button" onclick="calculateMean()">Calculate Mean</button>
+        <div id="meanResult">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Square Diagonal Calculator</p>
+        Side: <input type="number" id="squareSide" value="5" step="any" style="width: 60px;">
+        <br>
+        <button class="retro-button" onclick="calculateDiagonal()">Calculate Diagonal</button>
+        <div id="diagonalResult">Diagonal: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Volume Calculator</p>
+        Shape: <select id="volumeShape" onchange="toggleVolumeInputs()">
+            <option value="cube">Cube</option>
+            <option value="sphere">Sphere</option>
+            <option value="cylinder">Cylinder</option>
+            <option value="cone">Cone</option>
+            <option value="truncatedCone">Truncated Cone</option>
+            <option value="tetrahedron">Tetrahedron</option>
+            <option value="rectangular">Rectangular Prism</option>
+            <option value="triangularPrism">Triangular Prism</option>
+            <option value="pyramidTrunk">Pyramid Trunk</option>
+            <option value="pyramid">Pyramid</option>
+        </select>
+        <div id="volumeInputsCube" style="margin-top: 8px;">
+            Side: <input type="number" id="cubeSide" step="any" style="width: 60px;">
+        </div>
+        <div id="volumeInputsSphere" style="display: none; margin-top: 8px;">
+            Radius: <input type="number" id="sphereRadius" step="any" style="width: 60px;">
+        </div>
+        <div id="volumeInputsCylinder" style="display: none; margin-top: 8px;">
+            Radius: <input type="number" id="cylRadius" step="any" style="width: 60px;"> Height: <input type="number" id="cylHeight" step="any" style="width: 60px;">
+        </div>
+        <div id="volumeInputsCone" style="display: none; margin-top: 8px;">
+            Radius: <input type="number" id="coneRadius" step="any" style="width: 60px;"> Height: <input type="number" id="coneHeight" step="any" style="width: 60px;">
+        </div>
+        <div id="volumeInputsTruncatedCone" style="display: none; margin-top: 8px;">
+            Bottom radius: <input type="number" id="truncConeR1" step="any" style="width: 60px;"> Top radius: <input type="number" id="truncConeR2" step="any" style="width: 60px;"> Height: <input type="number" id="truncConeH" step="any" style="width: 60px;">
+        </div>
+        <div id="volumeInputsTetrahedron" style="display: none; margin-top: 8px;">
+            Side: <input type="number" id="tetraSide" step="any" style="width: 60px;">
+        </div>
+        <div id="volumeInputsRectangular" style="display: none; margin-top: 8px;">
+            Length: <input type="number" id="rectLength" step="any" style="width: 60px;"> Width: <input type="number" id="rectWidth" step="any" style="width: 60px;"> Height: <input type="number" id="rectHeight" step="any" style="width: 60px;">
+        </div>
+        <div id="volumeInputsTriangularPrism" style="display: none; margin-top: 8px;">
+            Base: <input type="number" id="triBase" step="any" style="width: 60px;"> Height: <input type="number" id="triHeight" step="any" style="width: 60px;"> Length: <input type="number" id="triLength" step="any" style="width: 60px;">
+        </div>
+        <div id="volumeInputsPyramidTrunk" style="display: none; margin-top: 8px;">
+            Base side: <input type="number" id="pyrBase1" step="any" style="width: 60px;"> Top side: <input type="number" id="pyrBase2" step="any" style="width: 60px;"> Height: <input type="number" id="pyrHeight" step="any" style="width: 60px;">
+        </div>
+        <div id="volumeInputsPyramid" style="display: none; margin-top: 8px;">
+            Base side: <input type="number" id="pyrBaseSide" step="any" style="width: 60px;"> Height: <input type="number" id="pyrHeightA" step="any" style="width: 60px;">
+        </div>
+        <br>
+        <button class="retro-button" onclick="calculateVolume()">Calculate Volume</button>
+        <div id="volumeResult">Volume: ?</div>
+        
+        <p>Total Surface Area Calculator (no lateral area input needed)</p>
+        Shape: <select id="area3DShape" onchange="toggleArea3DInputs()">
+            <option value="cube">Cube</option>
+            <option value="sphere">Sphere</option>
+            <option value="cylinder">Cylinder</option>
+            <option value="cone">Cone</option>
+            <option value="truncatedCone">Truncated Cone</option>
+            <option value="tetrahedron">Tetrahedron</option>
+            <option value="rectangular">Rectangular Prism</option>
+            <option value="triangularPrism">Triangular Prism</option>
+            <option value="pyramidTrunk">Pyramid Trunk</option>
+            <option value="pyramid">Square Pyramid</option>
+        </select>
+        <div id="area3DInputsCube" style="margin-top: 8px;">
+            Side: <input type="number" id="cubeSideA" step="any" style="width: 60px;">
+        </div>
+        <div id="area3DInputsSphere" style="display: none; margin-top: 8px;">
+            Radius: <input type="number" id="sphereRadiusA" step="any" style="width: 60px;">
+        </div>
+        <div id="area3DInputsCylinder" style="display: none; margin-top: 8px;">
+            Radius: <input type="number" id="cylRadiusA" step="any" style="width: 60px;"> Height: <input type="number" id="cylHeightA" step="any" style="width: 60px;">
+        </div>
+        <div id="area3DInputsCone" style="display: none; margin-top: 8px;">
+            Radius: <input type="number" id="coneRadiusA" step="any" style="width: 60px;"> Height: <input type="number" id="coneHeightA" step="any" style="width: 60px;">
+        </div>
+        <div id="area3DInputsTruncatedCone" style="display: none; margin-top: 8px;">
+            Bottom radius: <input type="number" id="truncConeRa1" step="any" style="width: 60px;"> Top radius: <input type="number" id="truncConeRa2" step="any" style="width: 60px;"> Height: <input type="number" id="truncConeHa" step="any" style="width: 60px;">
+        </div>
+        <div id="area3DInputsTetrahedron" style="display: none; margin-top: 8px;">
+            Side: <input type="number" id="tetraSideA" step="any" style="width: 60px;">
+        </div>
+        <div id="area3DInputsRectangular" style="display: none; margin-top: 8px;">
+            Length: <input type="number" id="rectLengthA" step="any" style="width: 60px;"> Width: <input type="number" id="rectWidthA" step="any" style="width: 60px;"> Height: <input type="number" id="rectHeightA" step="any" style="width: 60px;">
+        </div>
+        <div id="area3DInputsTriangularPrism" style="display: none; margin-top: 8px;">
+            Base: <input type="number" id="triBaseA" step="any" style="width: 60px;"> Height: <input type="number" id="triHeightA" step="any" style="width: 60px;"> Length: <input type="number" id="triLengthA" step="any" style="width: 60px;">
+        </div>
+        <div id="area3DInputsPyramidTrunk" style="display: none; margin-top: 8px;">
+            Base side: <input type="number" id="pyrBaseA1" step="any" style="width: 60px;"> Top side: <input type="number" id="pyrBaseA2" step="any" style="width: 60px;"> Height: <input type="number" id="pyrHeightA" step="any" style="width: 60px;">
+        </div>
+        <div id="area3DInputsPyramid" style="display: none; margin-top: 8px;">
+            Base side: <input type="number" id="pyrBaseSide" step="any" style="width: 60px;"> Height: <input type="number" id="pyrHeightB" step="any" style="width: 60px;">
+        </div>
+        <br>
+        <button class="retro-button" onclick="calculateSurfaceArea()">Calculate Total Surface Area</button>
+        <div id="area3DResult">Total Surface Area: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Standard Deviation Calculator</p>
+        Count: <input type="number" id="stdCount" value="3" min="1" step="1" style="width: 60px;">
+        <button class="retro-button" onclick="createStdInputs()" style="margin-left: 5px;">Create Items</button>
+        <div id="stdInputs" style="margin-top: 10px; text-align: left; display: inline-block; width: 100%;"></div>
+        <button class="retro-button" onclick="calculateStd()" style="margin-top: 8px;">Calculate Std Dev</button>
+        <div id="stdResult">Std Dev: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Cubic Equation Solver: ax³ + bx² + cx + d = 0</p>
+        a: <input type="number" id="cubicA" value="1" step="any" style="width: 40px;">
+        b: <input type="number" id="cubicB" value="0" step="any" style="width: 40px;">
+        c: <input type="number" id="cubicC" value="0" step="any" style="width: 40px;">
+        d: <input type="number" id="cubicD" value="-1" step="any" style="width: 40px;">
+        <br>
+        <button class="retro-button" onclick="solveCubic()">Solve Cubic</button>
+        <div id="cubicResult">Roots: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Nth Root Approximation: ⁿ√(x)</p>
+        Order n: <input type="number" id="rootOrder" value="2" min="2" step="1" style="width: 40px;">
+        x: <input type="number" id="rootNumber" value="8" step="any" style="width: 60px;">
+        <br>
+        <button class="retro-button" onclick="approximateNthRoot()">Approximate</button>
+        <div id="nthRootResult">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Euler's Formula: e^(iθ) = cos(θ) + i sin(θ)</p>
+        θ: <input type="number" id="eulerTheta" value="0" step="any" style="width: 60px;">
+        Unit: <select id="eulerUnit">
+            <option value="degrees">Degrees</option>
+            <option value="radians">Radians</option>
+        </select>
+        <br>
+        <button class="retro-button" onclick="calculateEuler()">Calculate</button>
+        <div id="eulerResult">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Triangle Area by Coordinates</p>
+        Point A: x <input type="number" id="ax" value="0" step="any" style="width: 40px;"> y <input type="number" id="ay" value="0" step="any" style="width: 40px;">
+        <br>
+        Point B: x <input type="number" id="bx" value="1" step="any" style="width: 40px;"> y <input type="number" id="by" value="0" step="any" style="width: 40px;">
+        <br>
+        Point C: x <input type="number" id="cx" value="0" step="any" style="width: 40px;"> y <input type="number" id="cy" value="1" step="any" style="width: 40px;">
+        <br>
+        <button class="retro-button" onclick="calculateAreaCoords()">Calculate Area</button>
+        <div id="coordsResult">Area: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Trigonometric and Hyperbolic Calculator</p>
+        Function: <select id="trigFunc">
+            <option value="sin">sin</option>
+            <option value="cos">cos</option>
+            <option value="tan">tan</option>
+            <option value="cot">cot</option>
+            <option value="sec">sec</option>
+            <option value="csc">csc</option>
+            <option value="sinh">sinh</option>
+            <option value="cosh">cosh</option>
+            <option value="tanh">tanh</option>
+            <option value="coth">coth</option>
+            <option value="sech">sech</option>
+            <option value="csch">csch</option>
+        </select>
+        <br>
+        Angle: <input type="number" id="trigAngle" value="0" step="any" style="width: 60px;">
+        Unit: <select id="trigUnit">
+            <option value="degrees">Degrees</option>
+            <option value="radians">Radians</option>
+        </select>
+        <br>
+        <button class="retro-button" onclick="calculateTrig()">Calculate</button>
+        <div id="trigResult">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Half / Double Angle Calculator</p>
+        Operation: <select id="angleOp">
+            <option value="half">Half Angle</option>
+            <option value="double">Double Angle</option>
+        </select>
+        Function: <select id="angleFunc">
+            <option value="sin">sin</option>
+            <option value="cos">cos</option>
+            <option value="tan">tan</option>
+        </select>
+        <br>
+        Angle: <input type="number" id="angleValue" value="30" step="any" style="width: 60px;">
+        Unit: <select id="angleUnit">
+            <option value="degrees">Degrees</option>
+            <option value="radians">Radians</option>
+        </select>
+        <br>
+        <button class="retro-button" onclick="calculateHalfDouble()">Calculate</button>
+        <div id="halfDoubleResult">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Distance Between Two Points</p>
+        Point A: x <input type="number" id="distAx" value="0" step="any" style="width: 40px;"> y <input type="number" id="distAy" value="0" step="any" style="width: 40px;">
+        <br>
+        Point B: x <input type="number" id="distBx" value="1" step="any" style="width: 40px;"> y <input type="number" id="distBy" value="1" step="any" style="width: 40px;">
+        <br>
+        <button class="retro-button" onclick="calculateDistance()">Calculate Distance</button>
+        <div id="distanceResult">Distance: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+
+        <p>Compound Interest Calculator</p>
+        Principal: <input type="number" id="compoundPrincipal" value="1000" step="any" style="width: 80px;">
+        <br>
+        Annual rate (%): <input type="number" id="compoundRate" value="5" step="any" style="width: 60px;">
+        <br>
+        Compounds per year: <input type="number" id="compoundFreq" value="12" min="1" step="1" style="width: 60px;">
+        <br>
+        Years: <input type="number" id="compoundYears" value="5" step="any" style="width: 60px;">
+        <br>
+        <button class="retro-button" onclick="calculateCompoundInterest()">Calculate Compound Interest</button>
+        <div id="compoundResult">Amount: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+
+        <p>Binomial Formula (Newton) Calculator</p>
+        n: <input type="number" id="binomialN" value="5" min="0" step="1" style="width: 60px;">
+        k: <input type="number" id="binomialK" value="2" min="0" step="1" style="width: 60px;">
+        <br>
+        <button class="retro-button" onclick="calculateBinomial()">Calculate C(n,k)</button>
+        <div id="binomialResult">Coefficient: ?</div>
+        <br>
+        Expand (a+b)^n:
+        <br>
+        a: <input type="number" id="binomialA" value="1" step="any" style="width: 50px;">
+        b: <input type="number" id="binomialB" value="1" step="any" style="width: 50px;">
+        n: <input type="number" id="binomialN2" value="3" min="0" step="1" style="width: 50px;">
+        <br>
+        <button class="retro-button" onclick="expandBinomial()">Expand</button>
+        <div id="binomialExpand">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+
+        <p>Algebraic Identities Calculator</p>
+        Formula: <select id="identityFormula">
+            <option value="sq_sum">(a+b)²</option>
+            <option value="sq_diff">(a-b)²</option>
+            <option value="diff_sq">(a+b)(a-b)</option>
+            <option value="cube_sum">(a+b)³</option>
+            <option value="cube_diff">(a-b)³</option>
+            <option value="sum_cubes">a³+b³ = (a+b)(a²-ab+b²)</option>
+            <option value="diff_cubes">a³-b³ = (a-b)(a²+ab+b²)</option>
+        </select>
+        <br>
+        a: <input type="number" id="identityA" value="2" step="any" style="width: 60px;">
+        b: <input type="number" id="identityB" value="3" step="any" style="width: 60px;">
+        <br>
+        <button class="retro-button" onclick="calculateIdentity()">Calculate</button>
+        <div id="identityResult">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+
+        <p>GCD / LCM Calculator</p>
+        Number a: <input type="number" id="gcdLcmA" value="12" min="1" step="1" style="width: 60px;">
+        Number b: <input type="number" id="gcdLcmB" value="18" min="1" step="1" style="width: 60px;">
+        <br>
+        <button class="retro-button" onclick="calculateGcdLcm()">Calculate</button>
+        <div id="gcdLcmResult">GCD/LCM: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+
+        <p>Logarithm Calculator (Any Base)</p>
+        x: <input type="number" id="logX" value="8" step="any" style="width: 60px;">
+        Base: <input type="number" id="logBase" value="2" step="any" style="width: 60px;">
+        <br>
+        <button class="retro-button" onclick="calculateLogBase()">Calculate</button>
+        <div id="logResult">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+
+        <p>Matrix Calculator</p>
+        Rows: <input type="number" id="matrixRows" value="2" min="1" max="5" style="width: 50px;">
+        Cols: <input type="number" id="matrixCols" value="2" min="1" max="5" style="width: 50px;">
+        <button class="retro-button" onclick="generateMatrixInputs()">Generate Matrix</button>
+        <div id="matrixInputs"></div>
+        Operation: <select id="matrixOp">
+            <option value="det">Determinant</option>
+            <option value="transpose">Transpose</option>
+        </select>
+        <br>
+        <button class="retro-button" onclick="calculateMatrix()">Calculate</button>
+        <div id="matrixResult">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Arc (Inverse Trigonometric) Calculator</p>
+        Function: <select id="arcFunc">
+            <option value="asin">arcsin (sin⁻¹)</option>
+            <option value="acos">arccos (cos⁻¹)</option>
+            <option value="atan">arctan (tan⁻¹)</option>
+            <option value="acot">arccot (cot⁻¹)</option>
+            <option value="asec">arcsec (sec⁻¹)</option>
+            <option value="acsc">arccsc (csc⁻¹)</option>
+        </select>
+        <br>
+        Value: <input type="text" id="arcValue" value="0.5" style="width: 80px;">
+        <div style="font-size: 11px; color: #202020; margin-top: 4px;">Supports expressions: π, e, √, +, -, *, /, ^</div>
+        <br>
+        Output: <select id="arcUnit">
+            <option value="degrees">Degrees</option>
+            <option value="radians">Radians</option>
+        </select>
+        <br>
+        <button class="retro-button" onclick="calculateArc()">Calculate</button>
+        <div id="arcResult">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Pythagorean Theorem Calculator</p>
+        Mode: <select id="pytagorasMode" onchange="updatePytagorasMode()">
+            <option value="findHyp">Find hypotenuse (c = √(a² + b²))</option>
+            <option value="findSideA">Find side a (a = √(c² - b²))</option>
+            <option value="findSideB">Find side b (b = √(c² - a²))</option>
+            <option value="checkTriangle">Check if right triangle</option>
+        </select>
+        <br>
+        <div id="pytagorasFindHyp" style="margin-top: 8px;">
+            Side a: <input type="text" id="pytagorasA1" value="3" style="width: 60px;">
+            Side b: <input type="text" id="pytagorasB1" value="4" style="width: 60px;">
+        </div>
+        <div id="pytagorasFindSideA" style="display: none; margin-top: 8px;">
+            Hypotenuse c: <input type="text" id="pytagorasC2" value="5" style="width: 60px;">
+            Side b: <input type="text" id="pytagorasB2" value="4" style="width: 60px;">
+        </div>
+        <div id="pytagorasFindSideB" style="display: none; margin-top: 8px;">
+            Hypotenuse c: <input type="text" id="pytagorasC3" value="5" style="width: 60px;">
+            Side a: <input type="text" id="pytagorasA3" value="3" style="width: 60px;">
+        </div>
+        <div id="pytagorasCheckTriangle" style="display: none; margin-top: 8px;">
+            Side a: <input type="text" id="pytagorasA4" value="3" style="width: 60px;">
+            Side b: <input type="text" id="pytagorasB4" value="4" style="width: 60px;">
+            Side c: <input type="text" id="pytagorasC4" value="5" style="width: 60px;">
+        </div>
+        <div style="font-size: 11px; color: #202020; margin-top: 4px;">Supports expressions: π, e, √, +, -, *, /, ^</div>
+        <br>
+        <button class="retro-button" onclick="calculatePytagoras()">Calculate</button>
+        <div id="pytagorasResult">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Function Graphing Calculator</p>
+        Function Type: <select id="funcType" onchange="updateFunctionInputs()">
+            <option value="linear">Linear: y = mx + b</option>
+            <option value="quadratic">Quadratic: y = ax² + bx + c</option>
+            <option value="custom">Custom: y = ...</option>
+        </select>
+        <br>
+        <div id="linearInputs" style="margin-top: 8px;">
+            Slope (m): <input type="text" id="linearM" value="2" style="width: 60px;">
+            Intercept (b): <input type="text" id="linearB" value="1" style="width: 60px;">
+        </div>
+        <div id="quadraticInputs" style="display: none; margin-top: 8px;">
+            a: <input type="text" id="quadA" value="1" style="width: 50px;">
+            b: <input type="text" id="quadB" value="0" style="width: 50px;">
+            c: <input type="text" id="quadC" value="0" style="width: 50px;">
+        </div>
+        <div id="customInputs" style="display: none; margin-top: 8px;">
+            Function: <input type="text" id="customFunc" value="x*x" style="width: 200px;">
+            <div style="font-size: 11px; color: #202020; margin-top: 4px;">Use x as variable: x*x, Math.sin(x), etc.</div>
+        </div>
+        <div style="margin-top: 8px;">
+            X range: from <input type="text" id="graphXMin" value="-10" style="width: 50px;"> to <input type="text" id="graphXMax" value="10" style="width: 50px;">
+            <br>
+            Y range: from <input type="text" id="graphYMin" value="-20" style="width: 50px;"> to <input type="text" id="graphYMax" value="20" style="width: 50px;">
+        </div>
+        <br>
+        <button class="retro-button" onclick="drawGraph()">Draw Graph</button>
+        <br><br>
+        <canvas id="graphCanvas" width="400" height="400" style="border: 2px inset #ffffff; background-color: white; margin: 10px 0;"></canvas>
+        <br>
+        <button class="retro-button" onclick="calculateFunctionPoints()">Calculate Points</button>
+        <div id="functionResult" style="margin-top: 10px; max-height: 200px; overflow-y: auto;"></div>
+
+<script>
+function reverseSqrt() {
+    let a = parseValue('coeffA');
+    let b = parseValue('radicB');
+    if (isNaN(a) || isNaN(b)) { document.getElementById('reverseResult').innerText = "Error!"; return; }
+    let n = (a * a) * b;
+    document.getElementById('reverseResult').innerText = "Result: √" + n;
+}
+
+function simplifySqrt() {
+    let n = document.getElementById('numInput').value;
+    if (n <= 0) { document.getElementById('result').innerText = "Error!"; return; }
+    let outside = 1;
+    let inside = n;
+    for (let i = 2; i * i <= inside; i++) {
+        while (inside % (i * i) === 0) {
+            outside *= i;
+            inside /= (i * i);
+        }
+    }
+    let text = (inside === 1) ? outside : (outside === 1 ? "" : outside) + "√" + inside;
+    document.getElementById('result').innerText = "Result: " + text;
+}
+
+function solveQuadratic() {
+    let a = parseValue('aInput');
+    let b = parseValue('bInput');
+    let c = parseValue('cInput');
+    if (a === 0) { document.getElementById('quadResult').innerText = "Not a quadratic equation (a=0)"; return; }
+    let d = b * b - 4 * a * c;
+    let result;
+    if (d > 0) {
+        let root1 = (-b + Math.sqrt(d)) / (2 * a);
+        let root2 = (-b - Math.sqrt(d)) / (2 * a);
+        result = "Roots: " + root1.toFixed(2) + " and " + root2.toFixed(2);
+    } else if (d === 0) {
+        let root = -b / (2 * a);
+        result = "Root: " + root.toFixed(2) + " (double)";
+    } else {
+        let realPart = (-b / (2 * a)).toFixed(2);
+        let imagPart = (Math.sqrt(-d) / (2 * a)).toFixed(2);
+        result = "Roots: " + realPart + " ± " + imagPart + "i";
+    }
+    document.getElementById('quadResult').innerText = result;
+}
+function approximateNthRoot() {
+    let n = parseInt(document.getElementById('rootOrder').value);
+    let x = parseValue('rootNumber');
+    
+    if (isNaN(n) || n < 2) {
+        document.getElementById('nthRootResult').innerText = "Error: Order n must be ≥ 2";
+        return;
+    }
+    if (isNaN(x)) {
+        document.getElementById('nthRootResult').innerText = "Error: Invalid number x";
+        return;
+    }
+    if (x < 0 && n % 2 === 0) {
+        document.getElementById('nthRootResult').innerText = "Error: Even root of negative number is complex";
+        return;
+    }
+    if (x === 0) {
+        document.getElementById('nthRootResult').innerText = "ⁿ√0 = 0";
+        return;
+    }
+    
+    let guess = x > 0 ? x / 2 : -Math.pow(-x, 1/n); // initial guess
+    for (let i = 0; i < 20; i++) { // more iterations for higher roots
+        let pow = Math.pow(guess, n - 1);
+        if (pow === 0) break; // avoid division by zero
+        guess = (1 / n) * ((n - 1) * guess + x / pow);
+    }
+    document.getElementById('nthRootResult').innerText = "ⁿ√" + x + " ≈ " + guess.toFixed(6);
+}
+
+function calculateDiagonal() {
+    let side = parseValue('squareSide');
+    if (isNaN(side) || side <= 0) {
+        document.getElementById('diagonalResult').innerText = "Error: Invalid side";
+        return;
+    }
+    let diagonal = side * Math.SQRT2;
+    document.getElementById('diagonalResult').innerText = "Diagonal = " + side + "√2 ≈ " + diagonal.toFixed(4);
+}
+
+function toggleVolumeInputs() {
+    let shape = document.getElementById('volumeShape').value;
+    document.getElementById('volumeInputsCube').style.display = shape === 'cube' ? 'block' : 'none';
+    document.getElementById('volumeInputsSphere').style.display = shape === 'sphere' ? 'block' : 'none';
+    document.getElementById('volumeInputsCylinder').style.display = shape === 'cylinder' ? 'block' : 'none';
+    document.getElementById('volumeInputsCone').style.display = shape === 'cone' ? 'block' : 'none';
+    document.getElementById('volumeInputsTruncatedCone').style.display = shape === 'truncatedCone' ? 'block' : 'none';
+    document.getElementById('volumeInputsTetrahedron').style.display = shape === 'tetrahedron' ? 'block' : 'none';
+    document.getElementById('volumeInputsRectangular').style.display = shape === 'rectangular' ? 'block' : 'none';
+    document.getElementById('volumeInputsTriangularPrism').style.display = shape === 'triangularPrism' ? 'block' : 'none';
+    document.getElementById('volumeInputsPyramidTrunk').style.display = shape === 'pyramidTrunk' ? 'block' : 'none';
+    document.getElementById('volumeInputsPyramid').style.display = shape === 'pyramid' ? 'block' : 'none';
+}
+
+function calculateVolume() {
+    let shape = document.getElementById('volumeShape').value;
+    let volume = NaN;
+    if (shape === 'cube') {
+        let side = parseValue('cubeSide');
+        if (!isNaN(side) && side > 0) volume = Math.pow(side, 3);
+    } else if (shape === 'sphere') {
+        let r = parseValue('sphereRadius');
+        if (!isNaN(r) && r > 0) volume = (4 / 3) * Math.PI * Math.pow(r, 3);
+    } else if (shape === 'cylinder') {
+        let r = parseValue('cylRadius');
+        let h = parseValue('cylHeight');
+        if (!isNaN(r) && r > 0 && !isNaN(h) && h > 0) volume = Math.PI * Math.pow(r, 2) * h;
+    } else if (shape === 'cone') {
+        let r = parseValue('coneRadius');
+        let h = parseValue('coneHeight');
+        if (!isNaN(r) && r > 0 && !isNaN(h) && h > 0) volume = (1 / 3) * Math.PI * Math.pow(r, 2) * h;
+    } else if (shape === 'truncatedCone') {
+        let r1 = parseValue('truncConeR1');
+        let r2 = parseValue('truncConeR2');
+        let h = parseValue('truncConeH');
+        if (!isNaN(r1) && r1 > 0 && !isNaN(r2) && r2 >= 0 && !isNaN(h) && h > 0) volume = (1 / 3) * Math.PI * h * (Math.pow(r1, 2) + r1 * r2 + Math.pow(r2, 2));
+    } else if (shape === 'tetrahedron') {
+        let a = parseValue('tetraSide');
+        if (!isNaN(a) && a > 0) volume = Math.pow(a, 3) / (6 * Math.sqrt(2));
+    } else if (shape === 'rectangular') {
+        let l = parseValue('rectLength');
+        let w = parseValue('rectWidth');
+        let h = parseValue('rectHeight');
+        if (!isNaN(l) && l > 0 && !isNaN(w) && w > 0 && !isNaN(h) && h > 0) volume = l * w * h;
+    } else if (shape === 'triangularPrism') {
+        let b = parseValue('triBase');
+        let h = parseValue('triHeight');
+        let l = parseValue('triLength');
+        if (!isNaN(b) && b > 0 && !isNaN(h) && h > 0 && !isNaN(l) && l > 0) volume = 0.5 * b * h * l;
+    } else if (shape === 'pyramidTrunk') {
+        let a1 = parseValue('pyrBase1');
+        let a2 = parseValue('pyrBase2');
+        let h = parseValue('pyrHeight');
+        if (!isNaN(a1) && a1 > 0 && !isNaN(a2) && a2 > 0 && !isNaN(h) && h > 0) volume = (h / 3) * (Math.pow(a1, 2) + a1 * a2 + Math.pow(a2, 2));
+    } else if (shape === 'pyramid') {
+        let a = parseValue('pyrBaseSide');
+        let h = parseValue('pyrHeightA');
+        if (!isNaN(a) && a > 0 && !isNaN(h) && h > 0) volume = (1 / 3) * Math.pow(a, 2) * h;
+    }
+    document.getElementById('volumeResult').innerText = isNaN(volume) ? 'Error: Invalid inputs' : 'Volume = ' + volume.toFixed(4);
+}
+
+function createStdInputs() {
+    let count = parseInt(document.getElementById('stdCount').value, 10);
+    let container = document.getElementById('stdInputs');
+    container.innerHTML = '';
+    if (isNaN(count) || count < 1) {
+        container.innerText = 'Enter a valid count ≥ 1';
+        return;
+    }
+    for (let i = 1; i <= count; i++) {
+        let row = document.createElement('div');
+        row.style.marginBottom = '6px';
+        row.innerHTML = 'Item ' + i + ' name: <input type="text" id="stdName' + i + '" placeholder="name" style="width: 80px;"> value: <input type="number" id="stdValue' + i + '" step="any" style="width: 80px;">';
+        container.appendChild(row);
+    }
+}
+
+function calculateStd() {
+    let count = parseInt(document.getElementById('stdCount').value, 10);
+    if (isNaN(count) || count < 1) {
+        document.getElementById('stdResult').innerText = 'Error: Invalid count';
+        return;
+    }
+    let values = [];
+    let named = [];
+    for (let i = 1; i <= count; i++) {
+        let name = document.getElementById('stdName' + i)?.value.trim() || ('Item ' + i);
+        let value = parseMathExpression(document.getElementById('stdValue' + i)?.value);
+        if (isNaN(value)) {
+            document.getElementById('stdResult').innerText = 'Error: Invalid value for ' + name;
+            return;
+        }
+        values.push(value);
+        named.push(name);
+    }
+    let mean = values.reduce((sum, v) => sum + v, 0) / values.length;
+    let variance = values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / values.length;
+    let stddev = Math.sqrt(variance);
+    document.getElementById('stdResult').innerText = 'Std Dev = ' + stddev.toFixed(4) + ' (mean = ' + mean.toFixed(4) + ')';
+}
+
+function calculateEuler() {
+    let theta = parseValue('eulerTheta');
+    let unit = document.getElementById('eulerUnit').value;
+    
+    if (isNaN(theta)) {
+        document.getElementById('eulerResult').innerText = "Error: Invalid angle θ";
+        return;
+    }
+    
+    let thetaRad = unit === 'degrees' ? theta * Math.PI / 180 : theta;
+    let cosVal = Math.cos(thetaRad);
+    let sinVal = Math.sin(thetaRad);
+    
+    let result = "e^(i" + theta + (unit === 'degrees' ? "°" : " rad") + ") = " + cosVal.toFixed(4) + " + i " + sinVal.toFixed(4);
+    document.getElementById('eulerResult').innerText = result;
+}
+
+function calculateAreaCoords() {
+    let ax = parseValue('ax');
+    let ay = parseValue('ay');
+    let bx = parseValue('bx');
+    let by = parseValue('by');
+    let cx = parseValue('cx');
+    let cy = parseValue('cy');
+    
+    if (isNaN(ax) || isNaN(ay) || isNaN(bx) || isNaN(by) || isNaN(cx) || isNaN(cy)) {
+        document.getElementById('coordsResult').innerText = "Error: Invalid coordinates";
+        return;
+    }
+    
+    let area = Math.abs(ax * (by - cy) + bx * (cy - ay) + cx * (ay - by)) / 2;
+    document.getElementById('coordsResult').innerText = "Area = " + area.toFixed(4);
+}
+
+function toggleHeightInputs() {
+    let type = document.getElementById('heightType').value;
+    document.getElementById('equilateralHeightInputs').style.display = type === 'equilateral' ? 'block' : 'none';
+    document.getElementById('rightHeightInputs').style.display = type === 'right' ? 'block' : 'none';
+}
+
+function calculateHeight() {
+    let type = document.getElementById('heightType').value;
+    let result;
+    if (type === 'equilateral') {
+        let side = parseValue('eqSide');
+        if (isNaN(side) || side <= 0) {
+            result = "Error: Invalid side";
+        } else {
+            let height = (side * Math.sqrt(3)) / 2;
+            result = "Height = " + height.toFixed(4);
+        }
+    } else if (type === 'right') {
+        let a = parseValue('legA');
+        let b = parseValue('legB');
+        let c = parseValue('hypC');
+        if (isNaN(a) || isNaN(b) || isNaN(c) || a <= 0 || b <= 0 || c <= 0 || a + b <= c || Math.abs(a*a + b*b - c*c) > 0.01) {
+            result = "Error: Invalid legs or not right triangle";
+        } else {
+            let height = (a * b) / c;
+            result = "Height to hypotenuse = " + height.toFixed(4);
+        }
+    }
+    document.getElementById('heightResult').innerText = result;
+}
+
+function calculateTrig() {
+    let func = document.getElementById('trigFunc').value;
+    let angle = parseValue('trigAngle');
+    let unit = document.getElementById('trigUnit').value;
+    
+    if (isNaN(angle)) {
+        document.getElementById('trigResult').innerText = "Error: Invalid angle";
+        return;
+    }
+    
+    let rad = unit === 'degrees' ? angle * Math.PI / 180 : angle;
+    let result;
+    
+    try {
+        if (func === 'sin') {
+            result = Math.sin(rad);
+        } else if (func === 'cos') {
+            result = Math.cos(rad);
+        } else if (func === 'tan') {
+            result = Math.tan(rad);
+        } else if (func === 'cot') {
+            let tanVal = Math.tan(rad);
+            if (Math.abs(tanVal) < 1e-10) {
+                result = "Undefined (tan = 0)";
+            } else {
+                result = 1 / tanVal;
+            }
+        } else if (func === 'sec') {
+            let cosVal = Math.cos(rad);
+            if (Math.abs(cosVal) < 1e-10) {
+                result = "Undefined (cos = 0)";
+            } else {
+                result = 1 / cosVal;
+            }
+        } else if (func === 'csc') {
+            let sinVal = Math.sin(rad);
+            if (Math.abs(sinVal) < 1e-10) {
+                result = "Undefined (sin = 0)";
+            } else {
+                result = 1 / sinVal;
+            }
+        } else if (func === 'sinh') {
+            result = Math.sinh(rad);
+        } else if (func === 'cosh') {
+            result = Math.cosh(rad);
+        } else if (func === 'tanh') {
+            result = Math.tanh(rad);
+        } else if (func === 'coth') {
+            let tanhVal = Math.tanh(rad);
+            if (Math.abs(tanhVal) < 1e-10) {
+                result = "Undefined (tanh = 0)";
+            } else {
+                result = 1 / tanhVal;
+            }
+        } else if (func === 'sech') {
+            let coshVal = Math.cosh(rad);
+            result = 1 / coshVal;
+        } else if (func === 'csch') {
+            let sinhVal = Math.sinh(rad);
+            if (Math.abs(sinhVal) < 1e-10) {
+                result = "Undefined (sinh = 0)";
+            } else {
+                result = 1 / sinhVal;
+            }
+        }
+        
+        if (typeof result === 'string') {
+            document.getElementById('trigResult').innerText = func + "(" + angle + (unit === 'degrees' ? "°" : " rad") + ") = " + result;
+        } else {
+            document.getElementById('trigResult').innerText = func + "(" + angle + (unit === 'degrees' ? "°" : " rad") + ") = " + result.toFixed(6);
+        }
+    } catch (e) {
+        document.getElementById('trigResult').innerText = "Error: Calculation failed";
+    }
+}
+
+function calculateDistance() {
+    let ax = parseValue('distAx');
+    let ay = parseValue('distAy');
+    let bx = parseValue('distBx');
+    let by = parseValue('distBy');
+    
+    if (isNaN(ax) || isNaN(ay) || isNaN(bx) || isNaN(by)) {
+        document.getElementById('distanceResult').innerText = "Error: Invalid coordinates";
+        return;
+    }
+    
+    let dx = bx - ax;
+    let dy = by - ay;
+    let distance = Math.sqrt(dx * dx + dy * dy);
+    
+    document.getElementById('distanceResult').innerText = "Distance = " + distance.toFixed(4);
+}
+
+function calculateCompoundInterest() {
+    let principal = parseValue('compoundPrincipal');
+    let rate = parseValue('compoundRate') / 100;
+    let freq = parseInt(document.getElementById('compoundFreq').value, 10);
+    let years = parseValue('compoundYears');
+
+    if (isNaN(principal) || principal < 0 || isNaN(rate) || rate < 0 || isNaN(freq) || freq < 1 || isNaN(years) || years < 0) {
+        document.getElementById('compoundResult').innerText = "Error: Invalid input";
+        return;
+    }
+
+    let amount = principal * Math.pow(1 + rate / freq, freq * years);
+    let interest = amount - principal;
+    document.getElementById('compoundResult').innerText = "Amount = " + amount.toFixed(2) + " | Interest = " + interest.toFixed(2);
+}
+
+function factorial(n) {
+    if (n < 0) return NaN;
+    if (n === 0 || n === 1) return 1;
+    let result = 1;
+    for (let i = 2; i <= n; i++) result *= i;
+    return result;
+}
+
+function binomialCoeff(n, k) {
+    if (k > n || k < 0) return 0;
+    if (k === 0 || k === n) return 1;
+    return factorial(n) / (factorial(k) * factorial(n - k));
+}
+
+function calculateBinomial() {
+    let n = parseInt(document.getElementById('binomialN').value, 10);
+    let k = parseInt(document.getElementById('binomialK').value, 10);
+    
+    if (isNaN(n) || isNaN(k) || n < 0 || k < 0 || k > n) {
+        document.getElementById('binomialResult').innerText = "Error: Invalid n or k";
+        return;
+    }
+    
+    let coeff = binomialCoeff(n, k);
+    document.getElementById('binomialResult').innerText = "C(" + n + "," + k + ") = " + coeff;
+}
+
+function expandBinomial() {
+    let a = parseValue('binomialA');
+    let b = parseValue('binomialB');
+    let n = parseInt(document.getElementById('binomialN2').value, 10);
+    
+    if (isNaN(a) || isNaN(b) || isNaN(n) || n < 0) {
+        document.getElementById('binomialExpand').innerText = "Error: Invalid input";
+        return;
+    }
+    
+    let result = 0;
+    let terms = [];
+    for (let k = 0; k <= n; k++) {
+        let coeff = binomialCoeff(n, k);
+        let term = coeff * Math.pow(a, n - k) * Math.pow(b, k);
+        result += term;
+        terms.push(coeff + "*" + a + "^" + (n - k) + "*" + b + "^" + k + "=" + term.toFixed(4));
+    }
+    
+    document.getElementById('binomialExpand').innerText = "(" + a + "+" + b + ")^" + n + " = " + result.toFixed(4);
+}
+
+function calculateIdentity() {
+    let formula = document.getElementById('identityFormula').value;
+    let a = parseValue('identityA');
+    let b = parseValue('identityB');
+    
+    if (isNaN(a) || isNaN(b)) {
+        document.getElementById('identityResult').innerText = "Error: Invalid input";
+        return;
+    }
+    
+    let result, display;
+    
+    if (formula === 'sq_sum') {
+        result = Math.pow(a + b, 2);
+        display = "(" + a + "+" + b + ")² = " + result.toFixed(4) + " | Expanded: " + a + "² + 2·" + a + "·" + b + " + " + b + "²";
+    } else if (formula === 'sq_diff') {
+        result = Math.pow(a - b, 2);
+        display = "(" + a + "-" + b + ")² = " + result.toFixed(4) + " | Expanded: " + a + "² - 2·" + a + "·" + b + " + " + b + "²";
+    } else if (formula === 'diff_sq') {
+        result = (a + b) * (a - b);
+        display = "(" + a + "+" + b + ")(" + a + "-" + b + ") = " + result.toFixed(4) + " | Expanded: " + a + "² - " + b + "²";
+    } else if (formula === 'cube_sum') {
+        result = Math.pow(a + b, 3);
+        display = "(" + a + "+" + b + ")³ = " + result.toFixed(4) + " | Expanded: " + a + "³ + 3·" + a + "²·" + b + " + 3·" + a + "·" + b + "² + " + b + "³";
+    } else if (formula === 'cube_diff') {
+        result = Math.pow(a - b, 3);
+        display = "(" + a + "-" + b + ")³ = " + result.toFixed(4) + " | Expanded: " + a + "³ - 3·" + a + "²·" + b + " + 3·" + a + "·" + b + "² - " + b + "³";
+    } else if (formula === 'sum_cubes') {
+        result = Math.pow(a, 3) + Math.pow(b, 3);
+        display = a + "³ + " + b + "³ = " + result.toFixed(4) + " | Factored: (" + a + "+" + b + ")(" + a + "²-" + a + "·" + b + "+" + b + "²)";
+    } else if (formula === 'diff_cubes') {
+        result = Math.pow(a, 3) - Math.pow(b, 3);
+        display = a + "³ - " + b + "³ = " + result.toFixed(4) + " | Factored: (" + a + "-" + b + ")(" + a + "²+" + a + "·" + b + "+" + b + "²)";
+    }
+    
+    document.getElementById('identityResult').innerText = display;
+}
+
+function gcd(a, b) {
+    while (b !== 0) {
+        let temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return Math.abs(a);
+}
+
+function lcm(a, b) {
+    return Math.abs(a * b) / gcd(a, b);
+}
+
+function calculateGcdLcm() {
+    let a = parseInt(document.getElementById('gcdLcmA').value, 10);
+    let b = parseInt(document.getElementById('gcdLcmB').value, 10);
+    
+    if (isNaN(a) || isNaN(b) || a <= 0 || b <= 0) {
+        document.getElementById('gcdLcmResult').innerText = "Error: Invalid input";
+        return;
+    }
+    
+    let gcdVal = gcd(a, b);
+    let lcmVal = lcm(a, b);
+    document.getElementById('gcdLcmResult').innerText = "GCD(" + a + "," + b + ") = " + gcdVal + " | LCM(" + a + "," + b + ") = " + lcmVal;
+}
+
+function calculateLogBase() {
+    let x = parseValue('logX');
+    let base = parseValue('logBase');
+    
+    if (isNaN(x) || isNaN(base) || x <= 0 || base <= 0 || base === 1) {
+        document.getElementById('logResult').innerText = "Error: x > 0 and base > 0, base ≠ 1";
+        return;
+    }
+    
+    let result = Math.log(x) / Math.log(base);
+    document.getElementById('logResult').innerText = "logₓ(" + x + ") = " + result.toFixed(6);
+}
+
+function calculateHalfDouble() {
+    let op = document.getElementById('angleOp').value;
+    let func = document.getElementById('angleFunc').value;
+    let angle = parseValue('angleValue');
+    let unit = document.getElementById('angleUnit').value;
+
+    if (isNaN(angle)) {
+        document.getElementById('halfDoubleResult').innerText = "Error: Invalid angle";
+        return;
+    }
+
+    let rad = unit === 'degrees' ? angle * Math.PI / 180 : angle;
+    let value;
+    if (op === 'half') {
+        if (func === 'sin') {
+            value = Math.sin(rad / 2);
+        } else if (func === 'cos') {
+            value = Math.cos(rad / 2);
+        } else if (func === 'tan') {
+            value = Math.tan(rad / 2);
+        }
+    } else {
+        if (func === 'sin') {
+            value = Math.sin(2 * rad);
+        } else if (func === 'cos') {
+            value = Math.cos(2 * rad);
+        } else if (func === 'tan') {
+            value = Math.tan(2 * rad);
+        }
+    }
+
+    if (func === 'tan' && !isFinite(value)) {
+        document.getElementById('halfDoubleResult').innerText = op + " " + func + "(" + angle + (unit === 'degrees' ? "°" : " rad") + ") = Undefined";
+    } else {
+        document.getElementById('halfDoubleResult').innerText = op + " " + func + "(" + angle + (unit === 'degrees' ? "°" : " rad") + ") = " + value.toFixed(6);
+    }
+}
+
+function solveCubic() {
+    let a = parseValue('cubicA');
+    let b = parseValue('cubicB');
+    let c = parseValue('cubicC');
+    let d = parseValue('cubicD');
+    
+    if (a === 0) {
+        document.getElementById('cubicResult').innerText = "Not a cubic equation (a=0)";
+        return;
+    }
+    
+    let roots = findRealRoots(a, b, c, d);
+    if (roots.length === 0) {
+        document.getElementById('cubicResult').innerText = "No real roots found";
+    } else {
+        let result = "Real roots: " + roots.map(r => r.toFixed(4)).join(", ");
+        document.getElementById('cubicResult').innerText = result;
+    }
+}
+
+function findRealRoots(a, b, c, d) {
+    let roots = [];
+    let guesses = [-10, -1, 0, 1, 10]; // initial guesses
+    let tolerance = 1e-6;
+    let maxIter = 100;
+    
+    for (let guess of guesses) {
+        let x = guess;
+        for (let i = 0; i < maxIter; i++) {
+            let fx = a * x * x * x + b * x * x + c * x + d;
+            let fpx = 3 * a * x * x + 2 * b * x + c;
+            if (Math.abs(fpx) < tolerance) break; // avoid division by zero
+            let newX = x - fx / fpx;
+            if (Math.abs(newX - x) < tolerance) {
+                // check if root
+                if (Math.abs(a * newX * newX * newX + b * newX * newX + c * newX + d) < tolerance) {
+                    if (!roots.some(r => Math.abs(r - newX) < tolerance)) {
+                        roots.push(newX);
+                    }
+                }
+                break;
+            }
+            x = newX;
+        }
+    }
+    return roots;
+}
+function calculateLn() {
+    let x = parseValue('lnInput');
+    if (isNaN(x) || x <= 0) { document.getElementById('lnResult').innerText = "Error!"; return; }
+    document.getElementById('lnResult').innerText = "ln(" + x + ") = " + Math.log(x).toFixed(4);
+}
+
+function convertAngle() {
+    let value = parseValue('angleValue');
+    let mode = document.getElementById('angleMode').value;
+    if (isNaN(value)) {
+        document.getElementById('angleResult').innerText = 'Error: invalid input';
+        return;
+    }
+    if (mode === 'deg2rad') {
+        let rad = value * Math.PI / 180;
+        document.getElementById('angleResult').innerText = value + '° = ' + rad.toFixed(6) + ' rad';
+    } else {
+        let deg = value * 180 / Math.PI;
+        document.getElementById('angleResult').innerText = value + ' rad = ' + deg.toFixed(6) + '°';
+    }
+}
+
+function approximateSqrt() {
+    let n = parseValue('sqrtApproxInput');
+    if (isNaN(n) || n < 0) { document.getElementById('sqrtApproxResult').innerText = "Error!"; return; }
+    document.getElementById('sqrtApproxResult').innerText = "√" + n + " ≈ " + Math.sqrt(n).toFixed(6);
+}
+
+function toggleInputs() {
+    let method = document.getElementById('areaMethod').value;
+    document.getElementById('sidesInputs').style.display = method === 'sides' ? 'block' : 'none';
+    document.getElementById('baseHeightInputs').style.display = method === 'baseheight' ? 'block' : 'none';
+    document.getElementById('angleInputs').style.display = method === 'angle' ? 'block' : 'none';
+    document.getElementById('equilateralInputs').style.display = method === 'equilateral' ? 'block' : 'none';
+    document.getElementById('rightTriangleInputs').style.display = method === 'right' ? 'block' : 'none';
+}
+
+function calculateArea() {
+    let method = document.getElementById('areaMethod').value;
+    let area = 0;
+    if (method === 'sides') {
+        let a = parseValue('sideA');
+        let b = parseValue('sideB');
+        let c = parseValue('sideC');
+        let s = (a + b + c) / 2;
+        area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
+    } else if (method === 'baseheight') {
+        let b = parseValue('base');
+        let h = parseValue('height');
+        area = 0.5 * b * h;
+    } else if (method === 'angle') {
+        let a = parseValue('sideA2');
+        let b = parseValue('sideB2');
+        let angle = parseValue('angleC') * (Math.PI / 180);
+        area = 0.5 * a * b * Math.sin(angle);
+    } else if (method === 'equilateral') {
+        let side = parseValue('equilateralSide');
+        area = (side * side * Math.sqrt(3)) / 4;
+    } else if (method === 'right') {
+        let a = parseValue('legA2');
+        let b = parseValue('legB2');
+        area = 0.5 * a * b;
+    }
+    document.getElementById('areaResult').innerText = isNaN(area) ? "Error!" : "Area: " + area.toFixed(2);
+}
+
+function updateLawMode() {
+    let mode = document.getElementById('lawMode').value;
+    document.getElementById('cosineSideInputs').style.display = mode === 'cosineSide' ? 'block' : 'none';
+    document.getElementById('cosineAngleInputs').style.display = mode === 'cosineAngle' ? 'block' : 'none';
+    document.getElementById('sineAngleInputs').style.display = mode === 'sineAngle' ? 'block' : 'none';
+    document.getElementById('sineSideInputs').style.display = mode === 'sineSide' ? 'block' : 'none';
+}
+
+function calculateTriangleLaw() {
+    let mode = document.getElementById('lawMode').value;
+    let result = 'Error: invalid input';
+    if (mode === 'cosineSide') {
+        let a = parseValue('lawA');
+        let b = parseValue('lawB');
+        let angle = parseValue('lawC') * (Math.PI / 180);
+        if (!isNaN(a) && !isNaN(b) && !isNaN(angle)) {
+            let c = Math.sqrt(Math.max(0, a * a + b * b - 2 * a * b * Math.cos(angle)));
+            result = 'Side c ≈ ' + c.toFixed(6);
+        }
+    } else if (mode === 'cosineAngle') {
+        let a = parseValue('lawA2');
+        let b = parseValue('lawB2');
+        let c = parseValue('lawC2');
+        if (!isNaN(a) && !isNaN(b) && !isNaN(c) && a > 0 && b > 0) {
+            let cosC = (a * a + b * b - c * c) / (2 * a * b);
+            if (cosC >= -1 && cosC <= 1) {
+                let angleC = Math.acos(cosC) * (180 / Math.PI);
+                result = 'Angle C ≈ ' + angleC.toFixed(6) + '°';
+            } else {
+                result = 'Error: invalid triangle sides';
+            }
+        }
+    } else if (mode === 'sineAngle') {
+        let opp = parseValue('lawOpp');
+        let hyp = parseValue('lawHyp');
+        if (!isNaN(opp) && !isNaN(hyp) && hyp !== 0 && opp <= hyp && opp >= 0) {
+            let angleA = Math.asin(opp / hyp) * (180 / Math.PI);
+            result = 'Angle A ≈ ' + angleA.toFixed(6) + '°';
+        }
+    } else if (mode === 'sineSide') {
+        let angleA = parseValue('lawAngleA') * (Math.PI / 180);
+        let hyp = parseValue('lawHyp2');
+        if (!isNaN(angleA) && !isNaN(hyp) && hyp >= 0) {
+            let opp = hyp * Math.sin(angleA);
+            result = 'Opposite side ≈ ' + opp.toFixed(6);
+        }
+    }
+    document.getElementById('lawResult').innerText = result;
+}
+
+function parseMathExpression(expr) {
+    if (typeof expr !== 'string') return NaN;
+    expr = expr.trim().toLowerCase().replace(/,/g, '.');
+
+    expr = expr.replace(/π/g, 'Math.PI');
+    expr = expr.replace(/\bpi\b/g, 'Math.PI');
+    expr = expr.replace(/\be\b/g, 'Math.E');
+
+    expr = expr.replace(/\bsqrt\s*\(/g, 'Math.sqrt(');
+    expr = expr.replace(/√\s*\(/g, 'Math.sqrt(');
+    expr = expr.replace(/√\s*(Math\.PI|Math\.E|\([^)]*\)|[0-9.]+)/g, 'Math.sqrt($1)');
+    expr = expr.replace(/\\sqrt\s*\{([^}]+)\}/g, 'Math.sqrt($1)');
+
+    // Handle common math function names
+    expr = expr.replace(/\b(sin|cos|tan|asin|acos|atan|sinh|cosh|tanh|asinh|acosh|atanh|exp|log|abs|min|max|pow|floor|ceil)\s*\(/g, 'Math.$1(');
+    expr = expr.replace(/\bcot\s*\(/g, '(1/Math.tan(');
+    expr = expr.replace(/\bsec\s*\(/g, '(1/Math.cos(');
+    expr = expr.replace(/\bcsc\s*\(/g, '(1/Math.sin(');
+
+    // Handle power operator ^
+    let powPattern = /([0-9.]+|Math\.PI|Math\.E|\([^()]+\))\s*\^\s*([0-9.]+|Math\.PI|Math\.E|\([^()]+\))/;
+    while (powPattern.test(expr)) {
+        expr = expr.replace(powPattern, 'Math.pow($1,$2)');
+    }
+
+    // implicit multiplication for simple forms: 2(, 2Math.sqrt, 2Math.PI, Math.PI(, Math.E(, π(, e(
+    expr = expr.replace(/(\d|Math\.PI|Math\.E|Math\.sqrt\([^()]*\)|\))\s*(?=\()/g, '$1*');
+    expr = expr.replace(/(\d|Math\.PI|Math\.E|\))\s*(?=Math\.sqrt\()/g, '$1*');
+    expr = expr.replace(/(\d|\))\s*(?=Math\.PI|Math\.E)/g, '$1*');
+
+    if (!/^[0-9+\-*/().,\sA-Za-z]+$/.test(expr)) {
+        return NaN;
+    }
+
+    try {
+        let value = Function('return ' + expr)();
+        return typeof value === 'number' && isFinite(value) ? value : NaN;
+    } catch (e) {
+        return NaN;
+    }
+}
+
+function parseValue(id) {
+    let raw = document.getElementById(id)?.value;
+    if (typeof raw !== 'string') return NaN;
+    raw = raw.trim();
+    if (raw.length === 0) return NaN;
+    let value = parseMathExpression(raw);
+    if (!isNaN(value)) return value;
+    return parseFloat(raw.replace(',', '.'));
+}
+
+function calculateMean() {
+    let mode = document.getElementById('meanMode').value;
+    let raw = document.getElementById('meanValues').value;
+    let parts = raw.split(',').map(s => s.trim()).filter(s => s.length > 0);
+    let nums = parts.map(v => parseMathExpression(v));
+    if (nums.length === 0 || nums.some(n => isNaN(n))) {
+        document.getElementById('meanResult').innerText = 'Error: enter comma-separated numeric expressions';
+        return;
+    }
+    if (mode === 'arithmetic') {
+        let sum = nums.reduce((acc, n) => acc + n, 0);
+        let mean = sum / nums.length;
+        document.getElementById('meanResult').innerText = 'Arithmetic mean = ' + mean.toFixed(6);
+    } else if (mode === 'geometric') {
+        if (nums.some(n => n <= 0)) {
+            document.getElementById('meanResult').innerText = 'Error: positive numbers only';
+            return;
+        }
+        let logSum = nums.reduce((acc, n) => acc + Math.log(n), 0);
+        let mean = Math.exp(logSum / nums.length);
+        document.getElementById('meanResult').innerText = 'Geometric mean = ' + mean.toFixed(6);
+    } else if (mode === 'harmonic') {
+        if (nums.some(n => n === 0)) {
+            document.getElementById('meanResult').innerText = 'Error: no zeros in harmonic mean';
+            return;
+        }
+        let sumRecip = nums.reduce((acc, n) => acc + 1 / n, 0);
+        let mean = nums.length / sumRecip;
+        document.getElementById('meanResult').innerText = 'Harmonic mean = ' + mean.toFixed(6);
+    }
+}
+
+function toggleArea3DInputs() {
+    let shape = document.getElementById('area3DShape').value;
+    document.getElementById('area3DInputsCube').style.display = shape === 'cube' ? 'block' : 'none';
+    document.getElementById('area3DInputsSphere').style.display = shape === 'sphere' ? 'block' : 'none';
+    document.getElementById('area3DInputsCylinder').style.display = shape === 'cylinder' ? 'block' : 'none';
+    document.getElementById('area3DInputsCone').style.display = shape === 'cone' ? 'block' : 'none';
+    document.getElementById('area3DInputsTruncatedCone').style.display = shape === 'truncatedCone' ? 'block' : 'none';
+    document.getElementById('area3DInputsTetrahedron').style.display = shape === 'tetrahedron' ? 'block' : 'none';
+    document.getElementById('area3DInputsRectangular').style.display = shape === 'rectangular' ? 'block' : 'none';
+    document.getElementById('area3DInputsTriangularPrism').style.display = shape === 'triangularPrism' ? 'block' : 'none';
+    document.getElementById('area3DInputsPyramidTrunk').style.display = shape === 'pyramidTrunk' ? 'block' : 'none';
+    document.getElementById('area3DInputsPyramid').style.display = shape === 'pyramid' ? 'block' : 'none';
+}
+
+function calculateSurfaceArea() {
+    let shape = document.getElementById('area3DShape').value;
+    let area = NaN;
+    if (shape === 'cube') {
+        let a = parseValue('cubeSideA');
+        if (!isNaN(a) && a > 0) area = 6 * Math.pow(a, 2);
+    } else if (shape === 'sphere') {
+        let r = parseValue('sphereRadiusA');
+        if (!isNaN(r) && r > 0) area = 4 * Math.PI * Math.pow(r, 2);
+    } else if (shape === 'cylinder') {
+        let r = parseValue('cylRadiusA');
+        let h = parseValue('cylHeightA');
+        if (!isNaN(r) && r > 0 && !isNaN(h) && h > 0) area = 2 * Math.PI * r * (r + h);
+    } else if (shape === 'cone') {
+        let r = parseValue('coneRadiusA');
+        let h = parseValue('coneHeightA');
+        if (!isNaN(r) && r > 0 && !isNaN(h) && h > 0) {
+            let s = Math.sqrt(Math.pow(r, 2) + Math.pow(h, 2));
+            area = Math.PI * r * (r + s);
+        }
+    } else if (shape === 'truncatedCone') {
+        let r1 = parseValue('truncConeRa1');
+        let r2 = parseValue('truncConeRa2');
+        let h = parseValue('truncConeHa');
+        if (!isNaN(r1) && r1 > 0 && !isNaN(r2) && r2 >= 0 && !isNaN(h) && h > 0) {
+            let s = Math.sqrt(Math.pow(r1 - r2, 2) + Math.pow(h, 2));
+            area = Math.PI * (Math.pow(r1, 2) + Math.pow(r2, 2) + (r1 + r2) * s);
+        }
+    } else if (shape === 'tetrahedron') {
+        let a = parseValue('tetraSideA');
+        if (!isNaN(a) && a > 0) area = Math.sqrt(3) * Math.pow(a, 2);
+    } else if (shape === 'rectangular') {
+        let l = parseValue('rectLengthA');
+        let w = parseValue('rectWidthA');
+        let h = parseValue('rectHeightA');
+        if (!isNaN(l) && l > 0 && !isNaN(w) && w > 0 && !isNaN(h) && h > 0) area = 2 * (l * w + l * h + w * h);
+    } else if (shape === 'triangularPrism') {
+        let b = parseValue('triBaseA');
+        let h = parseValue('triHeightA');
+        let l = parseValue('triLengthA');
+        if (!isNaN(b) && b > 0 && !isNaN(h) && h > 0 && !isNaN(l) && l > 0) {
+            let c = Math.sqrt(Math.pow(b, 2) + Math.pow(h, 2));
+            let baseArea = 0.5 * b * h;
+            area = 2 * baseArea + (b + h + c) * l;
+        }
+    } else if (shape === 'pyramidTrunk') {
+        let a1 = parseValue('pyrBaseA1');
+        let a2 = parseValue('pyrBaseA2');
+        let h = parseValue('pyrHeightA');
+        if (!isNaN(a1) && a1 > 0 && !isNaN(a2) && a2 > 0 && !isNaN(h) && h > 0) {
+            let s = Math.sqrt(Math.pow((a1 - a2) / 2, 2) + Math.pow(h, 2));
+            area = Math.pow(a1, 2) + Math.pow(a2, 2) + 2 * (a1 + a2) * s;
+        }
+    } else if (shape === 'pyramid') {
+        let a = parseValue('pyrBaseSide');
+        let h = parseValue('pyrHeightB');
+        if (!isNaN(a) && a > 0 && !isNaN(h) && h > 0) {
+            let s = Math.sqrt(Math.pow(a / 2, 2) + Math.pow(h, 2));
+            area = Math.pow(a, 2) + 2 * a * s;
+        }
+    }
+    document.getElementById('area3DResult').innerText = isNaN(area) ? 'Error: Invalid inputs' : 'Surface Area = ' + area.toFixed(4);
+}
+
+function generateMatrixInputs() {
+    let rows = parseInt(document.getElementById('matrixRows').value);
+    let cols = parseInt(document.getElementById('matrixCols').value);
+    if (isNaN(rows) || isNaN(cols) || rows < 1 || cols < 1 || rows > 5 || cols > 5) {
+        document.getElementById('matrixInputs').innerText = 'Error: Rows/Cols 1-5';
+        return;
+    }
+    let container = document.getElementById('matrixInputs');
+    container.innerHTML = '';
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            let input = document.createElement('input');
+            input.type = 'text';
+            input.id = 'matrix_' + i + '_' + j;
+            input.style.width = '50px';
+            input.placeholder = 'a' + (i+1) + (j+1);
+            container.appendChild(input);
+        }
+        container.appendChild(document.createElement('br'));
+    }
+}
+
+function parseMatrixValue(str) {
+    str = str.replace(',', '.');
+    return parseMathExpression(str);
+}
+
+function determinant(matrix) {
+    let n = matrix.length;
+    if (n === 1) return matrix[0][0];
+    if (n === 2) return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+    let det = 0;
+    for (let i = 0; i < n; i++) {
+        let sub = matrix.slice(1).map(row => row.slice(0, i).concat(row.slice(i+1)));
+        det += (i % 2 === 0 ? 1 : -1) * matrix[0][i] * determinant(sub);
+    }
+    return det;
+}
+
+function transpose(matrix) {
+    let rows = matrix.length;
+    let cols = matrix[0].length;
+    let trans = [];
+    for (let j = 0; j < cols; j++) {
+        trans[j] = [];
+        for (let i = 0; i < rows; i++) {
+            trans[j][i] = matrix[i][j];
+        }
+    }
+    return trans;
+}
+
+function calculateMatrix() {
+    let op = document.getElementById('matrixOp').value;
+    let rows = parseInt(document.getElementById('matrixRows').value);
+    let cols = parseInt(document.getElementById('matrixCols').value);
+    let matrix = [];
+    for (let i = 0; i < rows; i++) {
+        matrix[i] = [];
+        for (let j = 0; j < cols; j++) {
+            let input = document.getElementById('matrix_' + i + '_' + j);
+            if (!input) {
+                document.getElementById('matrixResult').innerText = 'Error: Generate matrix first';
+                return;
+            }
+            let val = parseMatrixValue(input.value);
+            if (isNaN(val)) {
+                document.getElementById('matrixResult').innerText = 'Error: Invalid input at ' + (i+1) + ',' + (j+1);
+                return;
+            }
+            matrix[i][j] = val;
+        }
+    }
+    if (op === 'det') {
+        if (rows !== cols) {
+            document.getElementById('matrixResult').innerText = 'Error: Determinant requires square matrix';
+            return;
+        }
+        let det = determinant(matrix);
+        document.getElementById('matrixResult').innerText = 'Determinant = ' + det.toFixed(4);
+    } else if (op === 'transpose') {
+        let trans = transpose(matrix);
+        let display = 'Transpose:\n';
+        for (let row of trans) {
+            display += row.map(x => x.toFixed(2)).join(' ') + '\n';
+        }
+        document.getElementById('matrixResult').innerText = display;
+    }
+}
+
+function calculateArc() {
+    let func = document.getElementById('arcFunc').value;
+    let val = parseValue('arcValue');
+    let unit = document.getElementById('arcUnit').value;
+    
+    if (isNaN(val)) {
+        document.getElementById('arcResult').innerText = "Error: Invalid input";
+        return;
+    }
+    
+    let result;
+    let resultRad;
+    
+    try {
+        if (func === 'asin') {
+            if (val < -1 || val > 1) {
+                document.getElementById('arcResult').innerText = "Error: arcsin requires value in [-1, 1]";
+                return;
+            }
+            resultRad = Math.asin(val);
+        } else if (func === 'acos') {
+            if (val < -1 || val > 1) {
+                document.getElementById('arcResult').innerText = "Error: arccos requires value in [-1, 1]";
+                return;
+            }
+            resultRad = Math.acos(val);
+        } else if (func === 'atan') {
+            resultRad = Math.atan(val);
+        } else if (func === 'acot') {
+            if (val === 0) {
+                document.getElementById('arcResult').innerText = "Error: arccot(0) is undefined";
+                return;
+            }
+            resultRad = Math.PI / 2 - Math.atan(val);
+        } else if (func === 'asec') {
+            if (Math.abs(val) < 1) {
+                document.getElementById('arcResult').innerText = "Error: arcsec requires |value| ≥ 1";
+                return;
+            }
+            resultRad = Math.acos(1 / val);
+        } else if (func === 'acsc') {
+            if (Math.abs(val) < 1) {
+                document.getElementById('arcResult').innerText = "Error: arccsc requires |value| ≥ 1";
+                return;
+            }
+            resultRad = Math.asin(1 / val);
+        }
+        
+        if (unit === 'degrees') {
+            result = resultRad * 180 / Math.PI;
+            document.getElementById('arcResult').innerText = func + "(" + val + ") = " + result.toFixed(6) + "°";
+        } else {
+            result = resultRad;
+            document.getElementById('arcResult').innerText = func + "(" + val + ") = " + result.toFixed(6) + " rad";
+        }
+    } catch (e) {
+        document.getElementById('arcResult').innerText = "Error: Calculation failed";
+    }
+}
+
+function updatePytagorasMode() {
+    let mode = document.getElementById('pytagorasMode').value;
+    document.getElementById('pytagorasFindHyp').style.display = mode === 'findHyp' ? 'block' : 'none';
+    document.getElementById('pytagorasFindSideA').style.display = mode === 'findSideA' ? 'block' : 'none';
+    document.getElementById('pytagorasFindSideB').style.display = mode === 'findSideB' ? 'block' : 'none';
+    document.getElementById('pytagorasCheckTriangle').style.display = mode === 'checkTriangle' ? 'block' : 'none';
+}
+
+function calculatePytagoras() {
+    let mode = document.getElementById('pytagorasMode').value;
+    let result = '';
+    
+    try {
+        if (mode === 'findHyp') {
+            let a = parseValue('pytagorasA1');
+            let b = parseValue('pytagorasB1');
+            if (isNaN(a) || isNaN(b) || a <= 0 || b <= 0) {
+                document.getElementById('pytagorasResult').innerText = "Error: Invalid input (a, b must be positive)";
+                return;
+            }
+            let c = Math.sqrt(a * a + b * b);
+            result = "c = √(" + a + "² + " + b + "²) = √" + (a*a + b*b) + " ≈ " + c.toFixed(6);
+        } 
+        else if (mode === 'findSideA') {
+            let c = parseValue('pytagorasC2');
+            let b = parseValue('pytagorasB2');
+            if (isNaN(c) || isNaN(b) || c <= 0 || b <= 0 || b >= c) {
+                document.getElementById('pytagorasResult').innerText = "Error: Invalid input (c must be > b > 0)";
+                return;
+            }
+            let a = Math.sqrt(c * c - b * b);
+            result = "a = √(" + c + "² - " + b + "²) = √" + (c*c - b*b) + " ≈ " + a.toFixed(6);
+        } 
+        else if (mode === 'findSideB') {
+            let c = parseValue('pytagorasC3');
+            let a = parseValue('pytagorasA3');
+            if (isNaN(c) || isNaN(a) || c <= 0 || a <= 0 || a >= c) {
+                document.getElementById('pytagorasResult').innerText = "Error: Invalid input (c must be > a > 0)";
+                return;
+            }
+            let b = Math.sqrt(c * c - a * a);
+            result = "b = √(" + c + "² - " + a + "²) = √" + (c*c - a*a) + " ≈ " + b.toFixed(6);
+        } 
+        else if (mode === 'checkTriangle') {
+            let a = parseValue('pytagorasA4');
+            let b = parseValue('pytagorasB4');
+            let c = parseValue('pytagorasC4');
+            if (isNaN(a) || isNaN(b) || isNaN(c) || a <= 0 || b <= 0 || c <= 0) {
+                document.getElementById('pytagorasResult').innerText = "Error: Invalid input (all sides must be positive)";
+                return;
+            }
+            
+            // Sort sides: ensure c is the largest
+            let sides = [a, b, c].sort((x, y) => x - y);
+            let s1 = sides[0], s2 = sides[1], s3 = sides[2];
+            
+            let leftSide = s1 * s1 + s2 * s2;
+            let rightSide = s3 * s3;
+            let tolerance = 0.0001;
+            
+            if (Math.abs(leftSide - rightSide) < tolerance) {
+                result = "✓ Right triangle! " + s1.toFixed(4) + "² + " + s2.toFixed(4) + "² = " + s3.toFixed(4) + "² (" + leftSide.toFixed(4) + " ≈ " + rightSide.toFixed(4) + ")";
+            } else if (leftSide > rightSide) {
+                result = "✗ NOT a right triangle. " + s1.toFixed(4) + "² + " + s2.toFixed(4) + "² = " + leftSide.toFixed(4) + " > " + rightSide.toFixed(4) + " (obtuse triangle)";
+            } else {
+                result = "✗ NOT a right triangle. " + s1.toFixed(4) + "² + " + s2.toFixed(4) + "² = " + leftSide.toFixed(4) + " < " + rightSide.toFixed(4) + " (acute triangle)";
+            }
+        }
+        
+        document.getElementById('pytagorasResult').innerText = result;
+    } catch (e) {
+        document.getElementById('pytagorasResult').innerText = "Error: Calculation failed";
+    }
+}
+
+function updateFunctionInputs() {
+    let type = document.getElementById('funcType').value;
+    document.getElementById('linearInputs').style.display = type === 'linear' ? 'block' : 'none';
+    document.getElementById('quadraticInputs').style.display = type === 'quadratic' ? 'block' : 'none';
+    document.getElementById('customInputs').style.display = type === 'custom' ? 'block' : 'none';
+}
+
+
+    // Graph pan/drag variables
+    let graphState = {
+        isDragging: false,
+        dragStartX: 0,
+        dragStartY: 0,
+        panX: 0,
+        panY: 0,
+        xMin: -10,
+        xMax: 10,
+        yMin: -20,
+        yMax: 20
+    };
+
+    function setupGraphCanvas() {
+        let canvas = document.getElementById('graphCanvas');
+        if (canvas._graphCanvasSetup) return;
+        canvas._graphCanvasSetup = true;
+    
+        canvas.addEventListener('mousedown', (e) => {
+            graphState.isDragging = true;
+            graphState.dragStartX = e.clientX;
+            graphState.dragStartY = e.clientY;
+        });
+    
+        canvas.addEventListener('mousemove', (e) => {
+            if (!graphState.isDragging) return;
+        
+            let deltaX = e.clientX - graphState.dragStartX;
+            let deltaY = e.clientY - graphState.dragStartY;
+        
+            // Update pan
+            graphState.panX += deltaX;
+            graphState.panY += deltaY;
+        
+            graphState.dragStartX = e.clientX;
+            graphState.dragStartY = e.clientY;
+        
+            // Redraw with new pan
+            redrawGraphWithPan();
+        });
+    
+        canvas.addEventListener('mouseup', () => {
+            graphState.isDragging = false;
+        });
+    
+        canvas.addEventListener('mouseleave', () => {
+            graphState.isDragging = false;
+        });
+    
+        // Zoom with mouse wheel
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            let zoomFactor = e.deltaY > 0 ? 1.1 : 0.9; // zoom out or in
+        
+            let canvas = document.getElementById('graphCanvas');
+            let rect = canvas.getBoundingClientRect();
+            let mouseX = e.clientX - rect.left;
+            let mouseY = e.clientY - rect.top;
+        
+            let xRange = graphState.xMax - graphState.xMin;
+            let yRange = graphState.yMax - graphState.yMin;
+        
+            let mouseXNorm = mouseX / canvas.width;
+            let mouseYNorm = 1 - (mouseY / canvas.height);
+        
+            let xAtMouse = graphState.xMin + mouseXNorm * xRange;
+            let yAtMouse = graphState.yMin + mouseYNorm * yRange;
+        
+            let newXRange = xRange * zoomFactor;
+            let newYRange = yRange * zoomFactor;
+        
+            graphState.xMin = xAtMouse - mouseXNorm * newXRange;
+            graphState.xMax = xAtMouse + (1 - mouseXNorm) * newXRange;
+            graphState.yMin = yAtMouse - mouseYNorm * newYRange;
+            graphState.yMax = yAtMouse + (1 - mouseYNorm) * newYRange;
+        
+            redrawGraphWithPan();
+        }, { passive: false });
+    }
+
+    function redrawGraphWithPan() {
+        let canvas = document.getElementById('graphCanvas');
+        let ctx = canvas.getContext('2d');
+        let w = canvas.width;
+        let h = canvas.height;
+        let type = document.getElementById('funcType').value;
+    
+        // Apply pan offset to coordinate system
+        let xRange = graphState.xMax - graphState.xMin;
+        let yRange = graphState.yMax - graphState.yMin;
+    
+        graphState.xMin -= (graphState.panX / w) * xRange;
+        graphState.xMax -= (graphState.panX / w) * xRange;
+        graphState.yMin += (graphState.panY / h) * yRange;
+        graphState.yMax += (graphState.panY / h) * yRange;
+    
+        graphState.panX = 0;
+        graphState.panY = 0;
+    
+        drawGraphInternal(ctx, w, h, type, graphState.xMin, graphState.xMax, graphState.yMin, graphState.yMax);
+    }
+
+    function drawGraphInternal(ctx, w, h, type, xMin, xMax, yMin, yMax) {
+        // Clear canvas
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, w, h);
+    
+        // Draw grid
+        ctx.strokeStyle = '#e0e0e0';
+        ctx.lineWidth = 1;
+        let gridX = Math.pow(10, Math.floor(Math.log10(xMax - xMin)));
+        let gridY = Math.pow(10, Math.floor(Math.log10(yMax - yMin)));
+    
+        for (let i = Math.ceil(xMin / gridX) * gridX; i <= xMax; i += gridX) {
+            let px = ((i - xMin) / (xMax - xMin)) * w;
+            ctx.beginPath();
+            ctx.moveTo(px, 0);
+            ctx.lineTo(px, h);
+            ctx.stroke();
+        }
+        for (let i = Math.ceil(yMin / gridY) * gridY; i <= yMax; i += gridY) {
+            let py = h - ((i - yMin) / (yMax - yMin)) * h;
+            ctx.beginPath();
+            ctx.moveTo(0, py);
+            ctx.lineTo(w, py);
+            ctx.stroke();
+        }
+    
+        // Draw axes
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
+    
+        // X-axis
+        let yAxisPx = h - ((0 - yMin) / (yMax - yMin)) * h;
+        if (yAxisPx >= 0 && yAxisPx <= h) {
+            ctx.beginPath();
+            ctx.moveTo(0, yAxisPx);
+            ctx.lineTo(w, yAxisPx);
+            ctx.stroke();
+        }
+    
+        // Y-axis
+        let xAxisPx = ((0 - xMin) / (xMax - xMin)) * w;
+        if (xAxisPx >= 0 && xAxisPx <= w) {
+            ctx.beginPath();
+            ctx.moveTo(xAxisPx, 0);
+            ctx.lineTo(xAxisPx, h);
+            ctx.stroke();
+        }
+    
+        // Draw function curve
+        ctx.strokeStyle = '#0000ff';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        let firstPoint = true;
+        let funcType = document.getElementById('funcType').value;
+    
+        for (let px = 0; px <= w; px += 1) {
+            let x = xMin + (px / w) * (xMax - xMin);
+            let y = evaluateFunction(x, funcType);
+        
+            if (!isNaN(y) && isFinite(y)) {
+                let py = h - ((y - yMin) / (yMax - yMin)) * h;
+            
+                if (py >= -10 && py <= h + 10) {
+                    if (firstPoint) {
+                        ctx.moveTo(px, py);
+                        firstPoint = false;
+                    } else {
+                        ctx.lineTo(px, py);
+                    }
+                } else {
+                    firstPoint = true;
+                }
+            }
+        }
+        ctx.stroke();
+    
+        // Draw axis labels
+        ctx.fillStyle = '#000000';
+        ctx.font = '12px monospace';
+        ctx.textAlign = 'center';
+        for (let i = Math.ceil(xMin / gridX) * gridX; i <= xMax; i += gridX) {
+            let px = ((i - xMin) / (xMax - xMin)) * w;
+            ctx.fillText(i.toFixed(0), px, yAxisPx + 15);
+        }
+    
+        ctx.textAlign = 'right';
+        for (let i = Math.ceil(yMin / gridY) * gridY; i <= yMax; i += gridY) {
+            let py = h - ((i - yMin) / (yMax - yMin)) * h;
+            ctx.fillText(i.toFixed(0), xAxisPx - 5, py + 4);
+        }
+    }
+function evaluateFunction(x, type) {
+    try {
+        if (type === 'linear') {
+            let m = parseValue('linearM');
+            let b = parseValue('linearB');
+            if (isNaN(m) || isNaN(b)) return NaN;
+            return m * x + b;
+        } else if (type === 'quadratic') {
+            let a = parseValue('quadA');
+            let b = parseValue('quadB');
+            let c = parseValue('quadC');
+            if (isNaN(a) || isNaN(b) || isNaN(c)) return NaN;
+            return a * x * x + b * x + c;
+        } else if (type === 'custom') {
+            let funcStr = document.getElementById('customFunc').value;
+            if (!funcStr) return NaN;
+            funcStr = funcStr.replace(/^\s*y\s*=\s*/i, '');
+            funcStr = funcStr.replace(/\bx\b/g, '(' + x + ')');
+            return parseMathExpression(funcStr);
+        }
+    } catch (e) {
+        return NaN;
+    }
+}
+
+function drawGraph() {
+    let canvas = document.getElementById('graphCanvas');
+    let ctx = canvas.getContext('2d');
+    let w = canvas.width;
+    let h = canvas.height;
+    let type = document.getElementById('funcType').value;
+    
+    let xMin = parseValue('graphXMin');
+    let xMax = parseValue('graphXMax');
+    let yMin = parseValue('graphYMin');
+    let yMax = parseValue('graphYMax');
+    
+    if (isNaN(xMin) || isNaN(xMax) || isNaN(yMin) || isNaN(yMax)) {
+        document.getElementById('functionResult').innerText = "Error: Invalid axis ranges";
+        return;
+    }
+    
+    if (xMin >= xMax || yMin >= yMax) {
+        document.getElementById('functionResult').innerText = "Error: Invalid ranges (min must be < max)";
+        return;
+    }
+    
+        // Store initial range for panning
+        graphState.xMin = xMin;
+        graphState.xMax = xMax;
+        graphState.yMin = yMin;
+        graphState.yMax = yMax;
+        graphState.panX = 0;
+        graphState.panY = 0;
+    
+        // Draw using internal function
+        drawGraphInternal(ctx, w, h, type, xMin, xMax, yMin, yMax);
+    
+        // Setup canvas interactivity
+        setupGraphCanvas();
+    
+    document.getElementById('functionResult').innerText = "Graph drawn successfully!";
+}
+
+function calculateFunctionPoints() {
+    let type = document.getElementById('funcType').value;
+    let xMin = parseValue('graphXMin');
+    let xMax = parseValue('graphXMax');
+    
+    if (isNaN(xMin) || isNaN(xMax) || xMin >= xMax) {
+        document.getElementById('functionResult').innerText = "Error: Invalid x range";
+        return;
+    }
+    
+    let step = (xMax - xMin) / 20; // 20 points
+    let points = [];
+    let table = "<table style='border-collapse: collapse; font-size: 12px; width: 100%;'>";
+    table += "<tr style='background: #c0c0c0;'><th style='border: 1px solid #000; padding: 4px;'>x</th><th style='border: 1px solid #000; padding: 4px;'>y</th></tr>";
+    
+    for (let x = xMin; x <= xMax; x += step) {
+        let y = evaluateFunction(x, type);
+        if (!isNaN(y) && isFinite(y)) {
+            points.push({x, y});
+            table += "<tr style='background: #dfdfdf;'><td style='border: 1px solid #000; padding: 4px;'>" + x.toFixed(3) + "</td><td style='border: 1px solid #000; padding: 4px;'>" + y.toFixed(3) + "</td></tr>";
+        }
+    }
+    table += "</table>";
+    
+    document.getElementById('functionResult').innerHTML = table;
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+
