@@ -1992,6 +1992,76 @@ function calculateFunctionPoints() {
     <h3>Advanced Statistical Matrices and Logarithmic Progressions</h3>
     <p>Modern data analysis relies heavily on standard deviation and matrix manipulations. Our dynamic matrix calculator handles array transformations, computing vector determinants across dynamic grids. Additionally, the algorithmic logarithm module processes calculations at any user-defined base, alongside linear approximations for radical systems and natural logarithm scales. This platform also features a dedicated compound interest tracking calculator, enabling precise financial predictions across varying chronological terms.</p>
 </div>
+<div id="physics-window" style="background: #c0c0c0; border: 2px outset #ffffff; margin: 20px auto; padding: 3px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000; box-shadow: 1px 1px 0px #000000;">
+    <div style="background: linear-gradient(90deg, #000080, #1084d0); color: white; padding: 3px 5px; font-size: 12px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+        <span>Orbital_Mechanics.exe</span>
+        <div style="background: #c0c0c0; border: 1px outset #fff; width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; color: black; font-size: 9px; font-weight: bold; cursor: pointer;" onclick="document.getElementById('physics-window').style.display='none'">X</div>
+    </div>
+
+    <div style="padding: 10px;">
+        <p style="font-size: 11px; margin: 0 0 10px 0; color: #404040;">Calculate Newtonian Gravitational Attraction & Low-Earth Orbit Vectors.</p>
+        
+        <fieldset style="border: 2px groove #ffffff; padding: 10px; margin-bottom: 10px; font-size: 12px;">
+            <legend>Input Vector Parameters</legend>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: center;">
+                <label>Mass of Central Body (M) [kg]:</label>
+                <input type="number" id="mass-m" value="5.972e24" style="background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                
+                <label>Mass of Orbiting Object (m) [kg]:</label>
+                <input type="number" id="mass-obj" value="1000" style="background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                
+                <label>Orbital Radius (r) [meters]:</label>
+                <input type="number" id="radius-r" value="6771000" style="background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+            </div>
+            <p style="font-size: 10px; color: #555; margin: 5px 0 0 0;">*Default values map a 1,000kg satellite at a 400km ISS altitude above Earth.</p>
+        </fieldset>
+
+        <div style="text-align: right; margin-bottom: 10px;">
+            <button onclick="calculateOrbit()" style="background: #c0c0c0; border: 2px outset #ffffff; font-family: 'MS Sans Serif', Arial, sans-serif; font-size: 12px; padding: 4px 15px; cursor: pointer; font-weight: bold; box-shadow: 1px 1px 0px #000000;">Execute Solver</button>
+        </div>
+
+        <fieldset style="border: 2px groove #ffffff; padding: 10px; font-size: 12px; background: #ffffff;">
+            <legend>Calculated System Analytics</legend>
+            <div style="font-family: monospace; line-height: 1.6; font-size: 11px;">
+                <div>Gravitational Force (F): <span id="out-force" style="font-weight: bold; color: #000080;">--</span> Newtons</div>
+                <div>Orbital Velocity (v):   <span id="out-velocity" style="font-weight: bold; color: #000080;">--</span> m/s</div>
+                <div>Orbital Period (T):     <span id="out-period" style="font-weight: bold; color: #000080;">--</span> minutes</div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+<script>
+function calculateOrbit() {
+    // Universal Gravitational Constant
+    const G = 6.6743e-11;
+
+    // Grab values from inputs
+    let M = parseFloat(document.getElementById("mass-m").value);
+    let m = parseFloat(document.getElementById("mass-obj").value);
+    let r = parseFloat(document.getElementById("radius-r").value);
+
+    // Error Validation check
+    if (isNaN(M) || isNaN(m) || isNaN(r) || r <= 0) {
+        alert("System Input Error: Please check vector values.");
+        return;
+    }
+
+    // 1. Universal Gravitation Formula: F = G * (M * m) / r^2
+    let force = G * (M * m) / Math.pow(r, 2);
+
+    // 2. Orbital Velocity Formula: v = sqrt(G * M / r)
+    let velocity = Math.sqrt((G * M) / r);
+
+    // 3. Orbital Period Formula: T = 2 * pi * sqrt(r^3 / (G * M))
+    let periodSeconds = 2 * Math.PI * Math.sqrt(Math.pow(r, 3) / (G * M));
+    let periodMinutes = periodSeconds / 60;
+
+    // Display formatted outputs
+    document.getElementById("out-force").innerText = force.toExponential(4);
+    document.getElementById("out-velocity").innerText = velocity.toFixed(2);
+    document.getElementById("out-period").innerText = periodMinutes.toFixed(2);
+}
+</script>
 </body>
 </html>
 
