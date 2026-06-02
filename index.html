@@ -2454,6 +2454,95 @@ function calculateOrbit() {
         </div>
         <hr style="border: 1px solid #808080; margin: 20px 0;">
         <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Ideal Gas Law Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="gasTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="P">Pressure (P)</option>
+                        <option value="V">Volume (V)</option>
+                        <option value="n">Amount (n)</option>
+                        <option value="T">Temperature (T)</option>
+                    </select>
+                </label>
+                <label style="display: block;">Pressure (P) [Pa]:
+                    <input type="number" id="gasP" value="101325" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Volume (V) [m³]:
+                    <input type="number" id="gasV" value="0.0224" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Amount (n) [mol]:
+                    <input type="number" id="gasN" value="1" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Temperature (T) [K]:
+                    <input type="number" id="gasT" value="273.15" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Gas constant (R) [J/(mol·K)]:
+                    <input type="number" id="gasR" value="8.314" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateIdealGasLaw()">Calculate</button>
+            </div>
+            <div id="gasResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="gasOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Snell's Law Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="snellTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="n1">Refractive index n₁</option>
+                        <option value="n2">Refractive index n₂</option>
+                        <option value="theta1">Angle θ₁</option>
+                        <option value="theta2">Angle θ₂</option>
+                    </select>
+                </label>
+                <label style="display: block;">Index n₁:
+                    <input type="number" id="snellN1" value="1" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Index n₂:
+                    <input type="number" id="snellN2" value="1.33" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Angle θ₁ [deg]:
+                    <input type="number" id="snellTheta1" value="30" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Angle θ₂ [deg]:
+                    <input type="number" id="snellTheta2" value="0" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateSnellsLaw()">Calculate</button>
+            </div>
+            <div id="snellResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="snellOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Thin Lens Equation Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="lensTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="f">Focal length (f)</option>
+                        <option value="do">Object distance (d₀)</option>
+                        <option value="di">Image distance (dᵢ)</option>
+                    </select>
+                </label>
+                <label style="display: block;">Focal length (f) [m]:
+                    <input type="number" id="lensF" value="0.1" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Object distance (d₀) [m]:
+                    <input type="number" id="lensDO" value="0.2" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Image distance (dᵢ) [m]:
+                    <input type="number" id="lensDI" value="0.2" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateThinLens()">Calculate</button>
+            </div>
+            <div id="lensResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="lensOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
             <p style="font-weight: bold; margin: 0 0 10px 0;">Kinematic Equation Solver</p>
             <div style="display: grid; gap: 10px; font-size: 12px;">
                 <label style="display: block;">Solve for:
@@ -2912,6 +3001,91 @@ function calculateEMC() {
         }
     }
     document.getElementById('emcOutput').innerText = (result === null || isNaN(result)) ? 'Error: insufficient or invalid inputs' : (target === 'c' ? result.toFixed(3) + ' m/s' : result.toExponential(6) + (target === 'E' ? ' J' : ' kg'));
+}
+
+function calculateIdealGasLaw() {
+    let target = document.getElementById('gasTarget').value;
+    let P = parseFloat(document.getElementById('gasP').value);
+    let V = parseFloat(document.getElementById('gasV').value);
+    let n = parseFloat(document.getElementById('gasN').value);
+    let T = parseFloat(document.getElementById('gasT').value);
+    let R = parseFloat(document.getElementById('gasR').value);
+    let result = null;
+
+    if (isNaN(R) || R <= 0) {
+        alert('Invalid gas constant');
+        return;
+    }
+
+    if (target === 'P') {
+        if (!isNaN(n) && !isNaN(T) && !isNaN(V) && V !== 0) {
+            result = (n * R * T) / V;
+        }
+    } else if (target === 'V') {
+        if (!isNaN(n) && !isNaN(T) && !isNaN(P) && P !== 0) {
+            result = (n * R * T) / P;
+        }
+    } else if (target === 'n') {
+        if (!isNaN(P) && !isNaN(V) && !isNaN(T) && T !== 0) {
+            result = (P * V) / (R * T);
+        }
+    } else if (target === 'T') {
+        if (!isNaN(P) && !isNaN(V) && !isNaN(n) && n !== 0) {
+            result = (P * V) / (n * R);
+        }
+    }
+    document.getElementById('gasOutput').innerText = (result === null || isNaN(result)) ? 'Error: insufficient or invalid inputs' : result.toExponential(6);
+}
+
+function calculateSnellsLaw() {
+    let target = document.getElementById('snellTarget').value;
+    let n1 = parseFloat(document.getElementById('snellN1').value);
+    let n2 = parseFloat(document.getElementById('snellN2').value);
+    let theta1 = parseFloat(document.getElementById('snellTheta1').value) * Math.PI / 180;
+    let theta2 = parseFloat(document.getElementById('snellTheta2').value) * Math.PI / 180;
+    let result = null;
+
+    if (target === 'n1') {
+        if (!isNaN(n2) && !isNaN(theta2) && Math.sin(theta2) !== 0) {
+            result = n2 * Math.sin(theta2) / Math.sin(theta1);
+        }
+    } else if (target === 'n2') {
+        if (!isNaN(n1) && !isNaN(theta1) && Math.sin(theta1) !== 0) {
+            result = n1 * Math.sin(theta1) / Math.sin(theta2);
+        }
+    } else if (target === 'theta1') {
+        if (!isNaN(n1) && !isNaN(n2) && Math.abs(n1 / n2) <= 1) {
+            result = Math.asin((n2 * Math.sin(theta2)) / n1) * 180 / Math.PI;
+        }
+    } else if (target === 'theta2') {
+        if (!isNaN(n1) && !isNaN(n2) && Math.abs(n1 * Math.sin(theta1) / n2) <= 1) {
+            result = Math.asin((n1 * Math.sin(theta1)) / n2) * 180 / Math.PI;
+        }
+    }
+    document.getElementById('snellOutput').innerText = (result === null || isNaN(result)) ? 'Error: insufficient or invalid inputs' : (target.startsWith('theta') ? result.toFixed(3) + '°' : result.toFixed(6));
+}
+
+function calculateThinLens() {
+    let target = document.getElementById('lensTarget').value;
+    let f = parseFloat(document.getElementById('lensF').value);
+    let d0 = parseFloat(document.getElementById('lensDO').value);
+    let di = parseFloat(document.getElementById('lensDI').value);
+    let result = null;
+
+    if (target === 'f') {
+        if (!isNaN(d0) && !isNaN(di) && d0 !== 0 && di !== 0) {
+            result = 1 / (1 / d0 + 1 / di);
+        }
+    } else if (target === 'do') {
+        if (!isNaN(f) && !isNaN(di) && f !== 0 && di !== 0 && (1 / f - 1 / di) !== 0) {
+            result = 1 / (1 / f - 1 / di);
+        }
+    } else if (target === 'di') {
+        if (!isNaN(f) && !isNaN(d0) && f !== 0 && d0 !== 0 && (1 / f - 1 / d0) !== 0) {
+            result = 1 / (1 / f - 1 / d0);
+        }
+    }
+    document.getElementById('lensOutput').innerText = (result === null || isNaN(result)) ? 'Error: insufficient or invalid inputs' : result.toFixed(6) + ' m';
 }
 
 function calculateSymbolicDerivative() {
