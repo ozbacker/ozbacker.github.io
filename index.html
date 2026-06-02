@@ -2210,6 +2210,38 @@ function calculateOrbit() {
         </div>
         <hr style="border: 1px solid #808080; margin: 20px 0;">
         <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Kirchhoff Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Law:
+                    <select id="kirchhoffLaw" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="kcl">KCL (junction current law)</option>
+                        <option value="kvl">KVL (loop voltage law)</option>
+                    </select>
+                </label>
+                <label style="display: block;">Solve for:
+                    <select id="kirchhoffTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="a">I₁ / V₁</option>
+                        <option value="b">I₂ / V₂</option>
+                        <option value="c">I₃ / V₃</option>
+                    </select>
+                </label>
+                <label style="display: block;">Value 1 [A or V]:
+                    <input type="number" id="kirchhoffA" value="0" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Value 2 [A or V]:
+                    <input type="number" id="kirchhoffB" value="5" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Value 3 [A or V]:
+                    <input type="number" id="kirchhoffC" value="-3" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateKirchhoff()">Calculate</button>
+            </div>
+            <div id="kirchhoffResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="kirchhoffOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
             <p style="font-weight: bold; margin: 0 0 10px 0;">Wave Speed & Frequency Calculator</p>
             <div style="display: grid; gap: 10px; font-size: 12px;">
                 <label style="display: block;">Solve for:
@@ -2870,6 +2902,45 @@ function calculateOhmsLaw() {
     }
 
     document.getElementById('ohmOutput').innerText = (result === null || isNaN(result)) ? 'Error: insufficient or invalid inputs' : result.toString();
+}
+
+function calculateKirchhoff() {
+    let law = document.getElementById('kirchhoffLaw').value;
+    let target = document.getElementById('kirchhoffTarget').value;
+    let a = parseFloat(document.getElementById('kirchhoffA').value);
+    let b = parseFloat(document.getElementById('kirchhoffB').value);
+    let c = parseFloat(document.getElementById('kirchhoffC').value);
+    let result = null;
+
+    if (law === 'kcl') {
+        // KCL: sum of currents entering junction = 0
+        if (target === 'a' && !isNaN(b) && !isNaN(c)) {
+            result = -(b + c);
+        } else if (target === 'b' && !isNaN(a) && !isNaN(c)) {
+            result = -(a + c);
+        } else if (target === 'c' && !isNaN(a) && !isNaN(b)) {
+            result = -(a + b);
+        }
+        if (result !== null && !isNaN(result)) {
+            document.getElementById('kirchhoffOutput').innerText = `${result.toFixed(6)} A (KCL)`;
+            return;
+        }
+    } else {
+        // KVL: sum of voltages around loop = 0
+        if (target === 'a' && !isNaN(b) && !isNaN(c)) {
+            result = -(b + c);
+        } else if (target === 'b' && !isNaN(a) && !isNaN(c)) {
+            result = -(a + c);
+        } else if (target === 'c' && !isNaN(a) && !isNaN(b)) {
+            result = -(a + b);
+        }
+        if (result !== null && !isNaN(result)) {
+            document.getElementById('kirchhoffOutput').innerText = `${result.toFixed(6)} V (KVL)`;
+            return;
+        }
+    }
+
+    document.getElementById('kirchhoffOutput').innerText = 'Error: insufficient or invalid inputs';
 }
 
 function calculateWaveSpeedFrequency() {
