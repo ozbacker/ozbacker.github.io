@@ -608,6 +608,48 @@
         <button class="retro-button" onclick="calculateFunctionPoints()">Calculate Points</button>
         <div id="functionResult" style="margin-top: 10px; max-height: 200px; overflow-y: auto;"></div>
 
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <p>Symbolic Calculus Calculator</p>
+        Expression: <input type="text" id="calcExpr" value="x^3 + 2*x - sin(x)" style="width: 260px;">
+        Variable: <input type="text" id="calcVar" value="x" style="width: 40px;">
+        <br>
+        <button class="retro-button" onclick="calculateSymbolicDerivative()">Derivative</button>
+        <button class="retro-button" onclick="calculateSymbolicIntegral()">Integral</button>
+        <div id="calcDerivativeResult">Derivative: ?</div>
+        <div id="calcIntegralResult">Integral: ? + C</div>
+        <div style="font-size: 11px; color: #202020; margin-top: 4px;">Supports x, constants, +, -, *, /, ^, sin, cos, tan, exp, ln, sqrt, power rule, product rule, quotient rule, chain rule.</div>
+
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <p>Riemann Sum Calculator</p>
+        Function: <input type="text" id="riemannExpr" value="x^2" style="width: 260px;">
+        Variable: <input type="text" id="riemannVar" value="x" style="width: 40px;">
+        <br>
+        Lower bound: <input type="text" id="riemannA" value="0" style="width: 60px;">  Upper bound: <input type="text" id="riemannB" value="2" style="width: 60px;">
+        <br>
+        Rectangles: <input type="number" id="riemannN" value="100" min="1" style="width: 60px;">  Method: <select id="riemannMethod" style="width: 120px; padding: 2px; font-family: monospace; font-size: 12px;"><option value="left">Left</option><option value="right">Right</option><option value="midpoint">Midpoint</option></select>
+        <br>
+        <label style="font-size: 11px; margin-top: 6px; display: inline-block;"><input type="checkbox" id="riemannExact" style="vertical-align: middle;"> Infinite rectangles / exact area via integral</label>
+        <br>
+        <button class="retro-button" onclick="calculateRiemannSum()">Calculate</button>
+        <div id="riemannResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+            <div>Approximate area: <span id="riemannApprox" style="font-weight: bold; color: #000080;">--</span></div>
+            <div>Exact area: <span id="riemannExactOutput" style="font-weight: bold; color: #000080;">--</span></div>
+        </div>
+
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <p>Taylor Series Calculator</p>
+        Function: <input type="text" id="taylorExpr" value="exp(x)" style="width: 260px;">
+        Variable: <input type="text" id="taylorVar" value="x" style="width: 40px;">
+        <br>
+        Expansion point: <input type="text" id="taylorA" value="0" style="width: 60px;">  Terms: <input type="number" id="taylorN" value="6" min="1" style="width: 60px;">
+        <br>
+        <button class="retro-button" onclick="calculateTaylorSeries()">Calculate</button>
+        <div id="taylorResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px; max-width: 480px;">
+            <div>Series: <span id="taylorSeries" style="font-weight: bold; color: #000080; display: block; white-space: pre-wrap;">--</span></div>
+            <div>Polynomial approx: <span id="taylorApprox" style="font-weight: bold; color: #000080; display: block; white-space: pre-wrap;">--</span></div>
+        </div>
+        <div style="font-size: 11px; color: #202020; margin-top: 4px;">Taylor series supports polynomials and standard expressions using sin, cos, exp, ln, sqrt, and powers.</div>
+
 <script>
 function reverseSqrt() {
     let a = parseValue('coeffA');
@@ -1992,45 +2034,29 @@ function calculateFunctionPoints() {
     <h3>Advanced Statistical Matrices and Logarithmic Progressions</h3>
     <p>Modern data analysis relies heavily on standard deviation and matrix manipulations. Our dynamic matrix calculator handles array transformations, computing vector determinants across dynamic grids. Additionally, the algorithmic logarithm module processes calculations at any user-defined base, alongside linear approximations for radical systems and natural logarithm scales. This platform also features a dedicated compound interest tracking calculator, enabling precise financial predictions across varying chronological terms.</p>
 </div>
-<div id="physics-window" style="background: #c0c0c0; border: 2px outset #ffffff; margin: 20px auto; padding: 3px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000; box-shadow: 1px 1px 0px #000000;">
-    <div style="background: linear-gradient(90deg, #000080, #1084d0); color: white; padding: 3px 5px; font-size: 12px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
-        <span>Orbital_Mechanics.exe</span>
-        <div style="background: #c0c0c0; border: 1px outset #fff; width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; color: black; font-size: 9px; font-weight: bold; cursor: pointer;" onclick="document.getElementById('physics-window').style.display='none'">X</div>
-    </div>
-
-    <div style="padding: 10px;">
-        <p style="font-size: 11px; margin: 0 0 10px 0; color: #404040;">Calculate Newtonian Gravitational Attraction & Low-Earth Orbit Vectors.</p>
-        
-        <fieldset style="border: 2px groove #ffffff; padding: 10px; margin-bottom: 10px; font-size: 12px;">
-            <legend>Input Vector Parameters</legend>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: center;">
-                <label>Mass of Central Body (M) [kg]:</label>
-                <input type="number" id="mass-m" value="5.972e24" style="background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
-                
-                <label>Mass of Orbiting Object (m) [kg]:</label>
-                <input type="number" id="mass-obj" value="1000" style="background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
-                
-                <label>Orbital Radius (r) [meters]:</label>
-                <input type="number" id="radius-r" value="6771000" style="background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Orbital Mechanics Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Mass of central body (M) [kg]:
+                    <input type="number" id="mass-m" value="5.972e24" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Mass of orbiting object (m) [kg]:
+                    <input type="number" id="mass-obj" value="1000" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Orbital radius (r) [m]:
+                    <input type="number" id="radius-r" value="6771000" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <div style="font-size: 10px; color: #555;">Default values map a 1,000kg satellite at a 400km ISS altitude above Earth.</div>
+                <button class="retro-button" onclick="calculateOrbit()">Calculate</button>
             </div>
-            <p style="font-size: 10px; color: #555; margin: 5px 0 0 0;">*Default values map a 1,000kg satellite at a 400km ISS altitude above Earth.</p>
-        </fieldset>
-
-        <div style="text-align: right; margin-bottom: 10px;">
-            <button onclick="calculateOrbit()" style="background: #c0c0c0; border: 2px outset #ffffff; font-family: 'MS Sans Serif', Arial, sans-serif; font-size: 12px; padding: 4px 15px; cursor: pointer; font-weight: bold; box-shadow: 1px 1px 0px #000000;">Execute Solver</button>
+            <div id="orbitResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Gravitational Force (F): <span id="out-force" style="font-weight: bold; color: #000080;">--</span> N</div>
+                <div>Orbital Velocity (v): <span id="out-velocity" style="font-weight: bold; color: #000080;">--</span> m/s</div>
+                <div>Orbital Period (T): <span id="out-period" style="font-weight: bold; color: #000080;">--</span> min</div>
+            </div>
         </div>
-
-        <fieldset style="border: 2px groove #ffffff; padding: 10px; font-size: 12px; background: #ffffff;">
-            <legend>Calculated System Analytics</legend>
-            <div style="font-family: monospace; line-height: 1.6; font-size: 11px;">
-                <div>Gravitational Force (F): <span id="out-force" style="font-weight: bold; color: #000080;">--</span> Newtons</div>
-                <div>Orbital Velocity (v):   <span id="out-velocity" style="font-weight: bold; color: #000080;">--</span> m/s</div>
-                <div>Orbital Period (T):     <span id="out-period" style="font-weight: bold; color: #000080;">--</span> minutes</div>
-            </div>
-        </fieldset>
-    </div>
-</div>
-<script>
+        <script>
 function calculateOrbit() {
     // Universal Gravitational Constant
     const G = 6.6743e-11;
@@ -2062,42 +2088,306 @@ function calculateOrbit() {
     document.getElementById("out-period").innerText = periodMinutes.toFixed(2);
 }
 </script>
-<div id="joules-window" style="background: #c0c0c0; border: 2px outset #ffffff; margin: 20px auto; padding: 3px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000; box-shadow: 1px 1px 0px #000000;">
-    <div style="background: linear-gradient(90deg, #000080, #1084d0); color: white; padding: 3px 5px; font-size: 12px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
-        <span>Joules_Law_Solver.exe</span>
-        <div style="background: #c0c0c0; border: 1px outset #fff; width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; color: black; font-size: 9px; font-weight: bold; cursor: pointer;" onclick="document.getElementById('joules-window').style.display='none'">X</div>
-    </div>
-
-    <div style="padding: 10px;">
-        <p style="font-size: 11px; margin: 0 0 10px 0; color: #404040;">Calculate thermal energy dissipation generated by electrical current over time (Q = I²Rt).</p>
-        
-        <fieldset style="border: 2px groove #ffffff; padding: 10px; margin-bottom: 10px; font-size: 12px;">
-            <legend>Circuit Parameters</legend>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: center;">
-                <label>Current (I) [Amperes]:</label>
-                <input type="number" id="joule-current" value="3" style="background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
-                
-                <label>Resistance (R) [Ohms]:</label>
-                <input type="number" id="joule-resistance" value="10" style="background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
-                
-                <label>Time Duration (t) [Seconds]:</label>
-                <input type="number" id="joule-time" value="5" style="background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Joule's Law Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Current (I) [A]:
+                    <input type="number" id="joule-current" value="3" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Resistance (R) [Ω]:
+                    <input type="number" id="joule-resistance" value="10" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Time (t) [s]:
+                    <input type="number" id="joule-time" value="5" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateJoulesHeat()">Calculate</button>
             </div>
-        </fieldset>
-
-        <div style="text-align: right; margin-bottom: 10px;">
-            <button onclick="calculateJoulesHeat()" style="background: #c0c0c0; border: 2px outset #ffffff; font-family: 'MS Sans Serif', Arial, sans-serif; font-size: 12px; padding: 4px 15px; cursor: pointer; font-weight: bold; box-shadow: 1px 1px 0px #000000;">Compute Thermal Output</button>
+            <div id="joulesResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Heat Generated (Q): <span id="out-joules-heat" style="font-weight: bold; color: #ff0000;">--</span> J</div>
+                <div>Power Dissipation (P): <span id="out-joules-power" style="font-weight: bold; color: #ff5500;">--</span> W</div>
+            </div>
         </div>
-
-        <fieldset style="border: 2px groove #ffffff; padding: 10px; font-size: 12px; background: #ffffff;">
-            <legend>Calculated Thermal Energy</legend>
-            <div style="font-family: monospace; line-height: 1.6; font-size: 11px;">
-                <div>Heat Generated (Q): <span id="out-joules-heat" style="font-weight: bold; color: #ff0000;">--</span> Joules</div>
-                <div>Power Dissipation (P): <span id="out-joules-power" style="font-weight: bold; color: #ff5500;">--</span> Watts (J/s)</div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Ohm's Law Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="ohmTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="v">Voltage (V)</option>
+                        <option value="i">Current (I)</option>
+                        <option value="r">Resistance (R)</option>
+                    </select>
+                </label>
+                <label style="display: block;">Voltage (V) [V]:
+                    <input type="number" id="ohmV" value="10" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Current (I) [A]:
+                    <input type="number" id="ohmI" value="2" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Resistance (R) [Ω]:
+                    <input type="number" id="ohmR" value="5" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateOhmsLaw()">Calculate</button>
             </div>
-        </fieldset>
-    </div>
-</div>
+            <div id="ohmResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="ohmOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Wave Speed & Frequency Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="waveTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="c">Wave speed (c)</option>
+                        <option value="lambda">Wavelength (λ)</option>
+                        <option value="f">Frequency (f)</option>
+                    </select>
+                </label>
+                <label style="display: block;">Wave speed (c) [m/s]:
+                    <input type="number" id="waveC" value="340" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Wavelength (λ) [m]:
+                    <input type="number" id="waveLambda" value="0.85" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Frequency (f) [Hz]:
+                    <input type="number" id="waveF" value="400" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateWaveSpeedFrequency()">Calculate</button>
+            </div>
+            <div id="waveResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="waveOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Coulomb's Law Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="coulombTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="F">Force (F)</option>
+                        <option value="q1">Charge q₁</option>
+                        <option value="q2">Charge q₂</option>
+                        <option value="r">Distance (r)</option>
+                    </select>
+                </label>
+                <label style="display: block;">Charge q₁ [C]:
+                    <input type="number" id="coulombQ1" value="1e-6" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Charge q₂ [C]:
+                    <input type="number" id="coulombQ2" value="2e-6" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Distance (r) [m]:
+                    <input type="number" id="coulombR" value="0.05" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Force (F) [N]:
+                    <input type="number" id="coulombF" value="0" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateCoulombsLaw()">Calculate</button>
+            </div>
+            <div id="coulombResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="coulombOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Magnetic Force Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="magneticTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="F">Force (F)</option>
+                        <option value="B">Magnetic field (B)</option>
+                        <option value="I">Current (I)</option>
+                        <option value="L">Length (L)</option>
+                    </select>
+                </label>
+                <label style="display: block;">Magnetic field (B) [T]:
+                    <input type="number" id="magneticB" value="0.5" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Current (I) [A]:
+                    <input type="number" id="magneticI" value="2" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Length (L) [m]:
+                    <input type="number" id="magneticL" value="0.2" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Force (F) [N]:
+                    <input type="number" id="magneticF" value="0" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Angle θ [degrees]:
+                    <input type="number" id="magneticTheta" value="90" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateMagneticForce()">Calculate</button>
+            </div>
+            <div id="magneticResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="magneticOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Kinetic & Potential Energy Converter</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Target energy:
+                    <select id="energyTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="ke">Kinetic energy (KE)</option>
+                        <option value="pe">Potential energy (PE)</option>
+                    </select>
+                </label>
+                <label style="display: block;">Mass (m) [kg]:
+                    <input type="number" id="energyM" value="2" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Velocity (v) [m/s]:
+                    <input type="number" id="energyV" value="10" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Height (h) [m]:
+                    <input type="number" id="energyH" value="5" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Gravity (g) [m/s²]:
+                    <input type="number" id="energyG" value="9.81" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateEnergyConverter()">Calculate</button>
+            </div>
+            <div id="energyResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="energyOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Angular Speed Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="angularTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="omega">Angular speed (ω)</option>
+                        <option value="f">Frequency (f)</option>
+                        <option value="T">Period (T)</option>
+                        <option value="v">Linear speed (v)</option>
+                    </select>
+                </label>
+                <label style="display: block;">Angular speed (ω) [rad/s]:
+                    <input type="number" id="angularOmega" value="6.28" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Frequency (f) [Hz]:
+                    <input type="number" id="angularF" value="1" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Period (T) [s]:
+                    <input type="number" id="angularT" value="1" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Radius (r) [m]:
+                    <input type="number" id="angularR" value="1" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Linear speed (v) [m/s]:
+                    <input type="number" id="angularV" value="6.28" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateAngularSpeed()">Calculate</button>
+            </div>
+            <div id="angularResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="angularOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Free Fall Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Initial velocity (u) [m/s]:
+                    <input type="number" id="freefallU" value="0" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Time (t) [s]:
+                    <input type="number" id="freefallT" value="3" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Gravity (g) [m/s²]:
+                    <input type="number" id="freefallG" value="9.81" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateFreeFall()">Calculate</button>
+            </div>
+            <div id="freefallResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Distance fallen: <span id="freefallDistance" style="font-weight: bold; color: #000080;">--</span> m</div>
+                <div>Final velocity: <span id="freefallVelocity" style="font-weight: bold; color: #000080;">--</span> m/s</div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Center of Mass Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Point masses (comma-separated, e.g. 2,3,1):
+                    <input type="text" id="comMasses" value="2,3,1" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">X coordinates (comma-separated):
+                    <input type="text" id="comX" value="0,2,4" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Y coordinates (comma-separated):
+                    <input type="text" id="comY" value="0,1,0" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateCenterOfMass()">Calculate</button>
+            </div>
+            <div id="comResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Center of mass: (<span id="comXOutput" style="font-weight: bold; color: #000080;">--</span>, <span id="comYOutput" style="font-weight: bold; color: #000080;">--</span>)</div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Kinematic Equation Solver</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="kinematicTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="v">Final velocity v</option>
+                        <option value="s">Displacement s</option>
+                        <option value="a">Acceleration a</option>
+                        <option value="t">Time t</option>
+                        <option value="u">Initial velocity u</option>
+                    </select>
+                </label>
+                <label style="display: block;">Initial velocity (u) [m/s]:
+                    <input type="number" id="kinematicU" value="0" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Final velocity (v) [m/s]:
+                    <input type="number" id="kinematicV" value="10" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Acceleration (a) [m/s²]:
+                    <input type="number" id="kinematicA" value="2" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Time (t) [s]:
+                    <input type="number" id="kinematicT" value="5" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Displacement (s) [m]:
+                    <input type="number" id="kinematicS" value="20" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateKinematics()">Calculate</button>
+            </div>
+            <div id="kinematicResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="kinematicOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Momentum & Collision Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Mass 1 (m₁) [kg]:
+                    <input type="number" id="momentumM1" value="2" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Velocity 1 (v₁) [m/s]:
+                    <input type="number" id="momentumV1" value="5" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Mass 2 (m₂) [kg]:
+                    <input type="number" id="momentumM2" value="3" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Velocity 2 (v₂) [m/s]:
+                    <input type="number" id="momentumV2" value="-2" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Collision type:
+                    <select id="collisionType" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="elastic">Elastic</option>
+                        <option value="inelastic">Perfectly Inelastic</option>
+                    </select>
+                </label>
+                <button class="retro-button" onclick="calculateMomentumCollision()">Calculate</button>
+            </div>
+            <div id="momentumResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Total momentum: <span id="momentumOutput" style="font-weight: bold; color: #000080;">--</span> kg·m/s</div>
+                <div>Final v₁: <span id="finalV1" style="font-weight: bold; color: #000080;">--</span> m/s</div>
+                <div>Final v₂: <span id="finalV2" style="font-weight: bold; color: #000080;">--</span> m/s</div>
+                <div>KE before: <span id="keBefore" style="font-weight: bold; color: #000080;">--</span> J</div>
+                <div>KE after: <span id="keAfter" style="font-weight: bold; color: #000080;">--</span> J</div>
+            </div>
+        </div>
 <script>
 function calculateJoulesHeat() {
     // Grab input values
@@ -2121,11 +2411,889 @@ function calculateJoulesHeat() {
     document.getElementById("out-joules-heat").innerText = heatEnergy.toFixed(2);
     document.getElementById("out-joules-power").innerText = powerWatts.toFixed(2);
 }
+
+function calculateKinematics() {
+    let u = parseFloat(document.getElementById('kinematicU').value);
+    let v = parseFloat(document.getElementById('kinematicV').value);
+    let a = parseFloat(document.getElementById('kinematicA').value);
+    let t = parseFloat(document.getElementById('kinematicT').value);
+    let s = parseFloat(document.getElementById('kinematicS').value);
+    let target = document.getElementById('kinematicTarget').value;
+    let result = null;
+
+    switch (target) {
+        case 'v':
+            if (!isNaN(u) && !isNaN(a) && !isNaN(t)) {
+                result = u + a * t;
+            } else if (!isNaN(u) && !isNaN(a) && !isNaN(s)) {
+                let val = u * u + 2 * a * s;
+                result = val >= 0 ? Math.sqrt(val) : NaN;
+            }
+            break;
+        case 's':
+            if (!isNaN(u) && !isNaN(t) && !isNaN(a)) {
+                result = u * t + 0.5 * a * t * t;
+            } else if (!isNaN(u) && !isNaN(v) && !isNaN(t)) {
+                result = 0.5 * (u + v) * t;
+            }
+            break;
+        case 'a':
+            if (!isNaN(v) && !isNaN(u) && !isNaN(t) && t !== 0) {
+                result = (v - u) / t;
+            } else if (!isNaN(s) && !isNaN(u) && !isNaN(t) && t !== 0) {
+                result = 2 * (s - u * t) / (t * t);
+            } else if (!isNaN(v) && !isNaN(u) && !isNaN(s) && s !== 0) {
+                result = (v * v - u * u) / (2 * s);
+            }
+            break;
+        case 't':
+            if (!isNaN(v) && !isNaN(u) && !isNaN(a) && a !== 0) {
+                result = (v - u) / a;
+            } else if (!isNaN(s) && !isNaN(u) && !isNaN(a)) {
+                let A = 0.5 * a;
+                let B = u;
+                let C = -s;
+                let discriminant = B * B - 4 * A * C;
+                if (discriminant >= 0) {
+                    let t1 = (-B + Math.sqrt(discriminant)) / (2 * A);
+                    let t2 = (-B - Math.sqrt(discriminant)) / (2 * A);
+                    result = [t1, t2].filter(v => v >= 0).join(', ');
+                }
+            }
+            break;
+        case 'u':
+            if (!isNaN(v) && !isNaN(a) && !isNaN(t)) {
+                result = v - a * t;
+            } else if (!isNaN(s) && !isNaN(t) && !isNaN(a) && t !== 0) {
+                result = (s - 0.5 * a * t * t) / t;
+            } else if (!isNaN(v) && !isNaN(s) && !isNaN(a)) {
+                let val = v * v - 2 * a * s;
+                result = val >= 0 ? Math.sqrt(val) : NaN;
+            }
+            break;
+    }
+    document.getElementById('kinematicOutput').innerText = isNaN(result) || result === null ? 'Error: insufficient or invalid inputs' : result.toString();
+}
+
+function calculateMomentumCollision() {
+    let m1 = parseFloat(document.getElementById('momentumM1').value);
+    let v1 = parseFloat(document.getElementById('momentumV1').value);
+    let m2 = parseFloat(document.getElementById('momentumM2').value);
+    let v2 = parseFloat(document.getElementById('momentumV2').value);
+    let type = document.getElementById('collisionType').value;
+
+    if (isNaN(m1) || isNaN(v1) || isNaN(m2) || isNaN(v2) || m1 < 0 || m2 < 0) {
+        alert('Invalid mass or velocity values');
+        return;
+    }
+
+    let totalMomentum = m1 * v1 + m2 * v2;
+    let keBefore = 0.5 * m1 * v1 * v1 + 0.5 * m2 * v2 * v2;
+    let finalV1 = 0;
+    let finalV2 = 0;
+    let keAfter = 0;
+
+    if (type === 'elastic') {
+        let denom = m1 + m2;
+        finalV1 = ((m1 - m2) / denom) * v1 + ((2 * m2) / denom) * v2;
+        finalV2 = ((2 * m1) / denom) * v1 + ((m2 - m1) / denom) * v2;
+        keAfter = 0.5 * m1 * finalV1 * finalV1 + 0.5 * m2 * finalV2 * finalV2;
+    } else {
+        let combined = totalMomentum / (m1 + m2);
+        finalV1 = combined;
+        finalV2 = combined;
+        keAfter = 0.5 * (m1 + m2) * combined * combined;
+    }
+
+    document.getElementById('momentumOutput').innerText = totalMomentum.toFixed(3);
+    document.getElementById('finalV1').innerText = finalV1.toFixed(3);
+    document.getElementById('finalV2').innerText = finalV2.toFixed(3);
+    document.getElementById('keBefore').innerText = keBefore.toFixed(3);
+    document.getElementById('keAfter').innerText = keAfter.toFixed(3);
+}
+
+function calculateOhmsLaw() {
+    let target = document.getElementById('ohmTarget').value;
+    let V = parseFloat(document.getElementById('ohmV').value);
+    let I = parseFloat(document.getElementById('ohmI').value);
+    let R = parseFloat(document.getElementById('ohmR').value);
+    let result = null;
+
+    if (target === 'v') {
+        if (!isNaN(I) && !isNaN(R)) {
+            result = I * R;
+        }
+    } else if (target === 'i') {
+        if (!isNaN(V) && !isNaN(R) && R !== 0) {
+            result = V / R;
+        }
+    } else if (target === 'r') {
+        if (!isNaN(V) && !isNaN(I) && I !== 0) {
+            result = V / I;
+        }
+    }
+
+    document.getElementById('ohmOutput').innerText = (result === null || isNaN(result)) ? 'Error: insufficient or invalid inputs' : result.toString();
+}
+
+function calculateWaveSpeedFrequency() {
+    let target = document.getElementById('waveTarget').value;
+    let c = parseFloat(document.getElementById('waveC').value);
+    let lambda = parseFloat(document.getElementById('waveLambda').value);
+    let f = parseFloat(document.getElementById('waveF').value);
+    let result = null;
+
+    if (target === 'c') {
+        if (!isNaN(lambda) && !isNaN(f)) {
+            result = lambda * f;
+        }
+    } else if (target === 'lambda') {
+        if (!isNaN(c) && !isNaN(f) && f !== 0) {
+            result = c / f;
+        }
+    } else if (target === 'f') {
+        if (!isNaN(c) && !isNaN(lambda) && lambda !== 0) {
+            result = c / lambda;
+        }
+    }
+
+    document.getElementById('waveOutput').innerText = (result === null || isNaN(result)) ? 'Error: insufficient or invalid inputs' : result.toString();
+}
+
+function calculateCoulombsLaw() {
+    const k = 8.9875517923e9;
+    let target = document.getElementById('coulombTarget').value;
+    let q1 = parseFloat(document.getElementById('coulombQ1').value);
+    let q2 = parseFloat(document.getElementById('coulombQ2').value);
+    let r = parseFloat(document.getElementById('coulombR').value);
+    let F = parseFloat(document.getElementById('coulombF').value);
+    let result = null;
+
+    if (target === 'F') {
+        if (!isNaN(q1) && !isNaN(q2) && !isNaN(r) && r !== 0) {
+            result = k * q1 * q2 / (r * r);
+        }
+    } else if (target === 'q1') {
+        if (!isNaN(F) && !isNaN(q2) && !isNaN(r) && q2 !== 0 && r !== 0) {
+            result = F * r * r / (k * q2);
+        }
+    } else if (target === 'q2') {
+        if (!isNaN(F) && !isNaN(q1) && !isNaN(r) && q1 !== 0 && r !== 0) {
+            result = F * r * r / (k * q1);
+        }
+    } else if (target === 'r') {
+        if (!isNaN(F) && !isNaN(q1) && !isNaN(q2) && F !== 0) {
+            let val = k * q1 * q2 / F;
+            result = val >= 0 ? Math.sqrt(val) : NaN;
+        }
+    }
+
+    document.getElementById('coulombOutput').innerText = (result === null || isNaN(result)) ? 'Error: insufficient or invalid inputs' : result.toString();
+}
+
+function calculateMagneticForce() {
+    let target = document.getElementById('magneticTarget').value;
+    let B = parseFloat(document.getElementById('magneticB').value);
+    let I = parseFloat(document.getElementById('magneticI').value);
+    let L = parseFloat(document.getElementById('magneticL').value);
+    let F = parseFloat(document.getElementById('magneticF').value);
+    let theta = parseFloat(document.getElementById('magneticTheta').value);
+    let result = null;
+    let sinTheta = Math.sin((theta * Math.PI) / 180);
+
+    if (target === 'F') {
+        if (!isNaN(B) && !isNaN(I) && !isNaN(L)) {
+            result = B * I * L * sinTheta;
+        }
+    } else if (target === 'B') {
+        if (!isNaN(F) && !isNaN(I) && !isNaN(L) && I !== 0 && L !== 0) {
+            result = F / (I * L * sinTheta);
+        }
+    } else if (target === 'I') {
+        if (!isNaN(F) && !isNaN(B) && !isNaN(L) && B !== 0 && L !== 0) {
+            result = F / (B * L * sinTheta);
+        }
+    } else if (target === 'L') {
+        if (!isNaN(F) && !isNaN(B) && !isNaN(I) && B !== 0 && I !== 0) {
+            result = F / (B * I * sinTheta);
+        }
+    }
+
+    document.getElementById('magneticOutput').innerText = (result === null || isNaN(result)) ? 'Error: insufficient or invalid inputs' : result.toString();
+}
+
+function calculateEnergyConverter() {
+    let target = document.getElementById('energyTarget').value;
+    let m = parseFloat(document.getElementById('energyM').value);
+    let v = parseFloat(document.getElementById('energyV').value);
+    let h = parseFloat(document.getElementById('energyH').value);
+    let g = parseFloat(document.getElementById('energyG').value);
+    let result = null;
+    let ke = (!isNaN(m) && !isNaN(v)) ? 0.5 * m * v * v : null;
+    let pe = (!isNaN(m) && !isNaN(h) && !isNaN(g)) ? m * g * h : null;
+
+    if (target === 'ke') {
+        result = ke;
+    } else if (target === 'pe') {
+        result = pe;
+    }
+
+    let output = 'Error: insufficient or invalid inputs';
+    if (result !== null && !isNaN(result)) {
+        output = result.toString();
+        if (ke !== null && !isNaN(ke) && pe !== null && !isNaN(pe)) {
+            output += ' (KE=' + ke.toFixed(3) + ' J, PE=' + pe.toFixed(3) + ' J, total=' + (ke + pe).toFixed(3) + ' J)';
+        }
+    }
+    document.getElementById('energyOutput').innerText = output;
+}
+
+function calculateAngularSpeed() {
+    let target = document.getElementById('angularTarget').value;
+    let omega = parseFloat(document.getElementById('angularOmega').value);
+    let f = parseFloat(document.getElementById('angularF').value);
+    let T = parseFloat(document.getElementById('angularT').value);
+    let r = parseFloat(document.getElementById('angularR').value);
+    let v = parseFloat(document.getElementById('angularV').value);
+    let result = null;
+
+    if (target === 'omega') {
+        if (!isNaN(f)) {
+            result = 2 * Math.PI * f;
+        } else if (!isNaN(T) && T !== 0) {
+            result = 2 * Math.PI / T;
+        }
+    } else if (target === 'f') {
+        if (!isNaN(T) && T !== 0) {
+            result = 1 / T;
+        } else if (!isNaN(omega)) {
+            result = omega / (2 * Math.PI);
+        }
+    } else if (target === 'T') {
+        if (!isNaN(f) && f !== 0) {
+            result = 1 / f;
+        } else if (!isNaN(omega) && omega !== 0) {
+            result = 2 * Math.PI / omega;
+        }
+    } else if (target === 'v') {
+        if (!isNaN(omega) && !isNaN(r)) {
+            result = omega * r;
+        } else if (!isNaN(f) && !isNaN(r)) {
+            result = 2 * Math.PI * f * r;
+        }
+    }
+
+    document.getElementById('angularOutput').innerText = (result === null || isNaN(result)) ? 'Error: insufficient or invalid inputs' : result.toString();
+}
+
+function calculateFreeFall() {
+    let u = parseFloat(document.getElementById('freefallU').value);
+    let t = parseFloat(document.getElementById('freefallT').value);
+    let g = parseFloat(document.getElementById('freefallG').value);
+    if (isNaN(u) || isNaN(t) || isNaN(g)) {
+        alert('Invalid free fall input');
+        return;
+    }
+    let distance = u * t + 0.5 * g * t * t;
+    let finalVelocity = u + g * t;
+    document.getElementById('freefallDistance').innerText = distance.toFixed(3);
+    document.getElementById('freefallVelocity').innerText = finalVelocity.toFixed(3);
+}
+
+function calculateCenterOfMass() {
+    let masses = document.getElementById('comMasses').value.split(',').map(x => parseFloat(x.trim()));
+    let xs = document.getElementById('comX').value.split(',').map(x => parseFloat(x.trim()));
+    let ys = document.getElementById('comY').value.split(',').map(x => parseFloat(x.trim()));
+    if (masses.length !== xs.length || masses.length !== ys.length || masses.some(isNaN) || xs.some(isNaN) || ys.some(isNaN)) {
+        alert('Invalid center of mass input');
+        return;
+    }
+    let totalMass = masses.reduce((sum, m) => sum + m, 0);
+    if (totalMass === 0) {
+        alert('Total mass cannot be zero');
+        return;
+    }
+    let xCom = masses.reduce((sum, m, i) => sum + m * xs[i], 0) / totalMass;
+    let yCom = masses.reduce((sum, m, i) => sum + m * ys[i], 0) / totalMass;
+    document.getElementById('comXOutput').innerText = xCom.toFixed(3);
+    document.getElementById('comYOutput').innerText = yCom.toFixed(3);
+}
+
+function calculateSymbolicDerivative() {
+    let expr = document.getElementById('calcExpr').value.trim();
+    let variable = document.getElementById('calcVar').value.trim() || 'x';
+    let ast = parseSymbolicExpression(expr);
+    if (!ast) {
+        document.getElementById('calcDerivativeResult').innerText = 'Derivative: Error: invalid expression';
+        return;
+    }
+    let derivativeAst = differentiateNode(ast, variable);
+    if (!derivativeAst) {
+        document.getElementById('calcDerivativeResult').innerText = 'Derivative: Error: unsupported expression';
+        return;
+    }
+    document.getElementById('calcDerivativeResult').innerText = 'Derivative: ' + stringifyNode(simplifyNode(derivativeAst));
+}
+
+function calculateSymbolicIntegral() {
+    let expr = document.getElementById('calcExpr').value.trim();
+    let variable = document.getElementById('calcVar').value.trim() || 'x';
+    let ast = parseSymbolicExpression(expr);
+    if (!ast) {
+        document.getElementById('calcIntegralResult').innerText = 'Integral: Error: invalid expression';
+        return;
+    }
+    let integralAst = integrateNode(ast, variable);
+    if (!integralAst) {
+        document.getElementById('calcIntegralResult').innerText = 'Integral: Error: unsupported expression';
+        return;
+    }
+    document.getElementById('calcIntegralResult').innerText = 'Integral: ' + stringifyNode(simplifyNode(integralAst)) + ' + C';
+}
+
+function calculateRiemannSum() {
+    let expr = document.getElementById('riemannExpr').value.trim();
+    let variable = document.getElementById('riemannVar').value.trim() || 'x';
+    let a = parseFloat(document.getElementById('riemannA').value);
+    let b = parseFloat(document.getElementById('riemannB').value);
+    let n = parseInt(document.getElementById('riemannN').value);
+    let method = document.getElementById('riemannMethod').value;
+    let exactRequested = document.getElementById('riemannExact').checked;
+    let ast = parseSymbolicExpression(expr);
+    if (!ast || isNaN(a) || isNaN(b) || isNaN(n) || n < 1 || a === b) {
+        document.getElementById('riemannApprox').innerText = 'Error';
+        document.getElementById('riemannExactOutput').innerText = 'Error';
+        return;
+    }
+    let dx = (b - a) / n;
+    let sum = 0;
+    for (let i = 0; i < n; i++) {
+        let x;
+        if (method === 'left') x = a + i * dx;
+        else if (method === 'right') x = a + (i + 1) * dx;
+        else x = a + (i + 0.5) * dx;
+        sum += evaluateSymbolicNode(ast, variable, x);
+    }
+    let approx = sum * dx;
+    document.getElementById('riemannApprox').innerText = isFinite(approx) ? approx.toFixed(6) : 'Error';
+    if (exactRequested) {
+        let integralAst = integrateNode(ast, variable);
+        if (integralAst) {
+            let simplified = simplifyNode(integralAst);
+            let exact = evaluateSymbolicNode(simplified, variable, b) - evaluateSymbolicNode(simplified, variable, a);
+            document.getElementById('riemannExactOutput').innerText = isFinite(exact) ? exact.toString() : 'Unsupported';
+        } else {
+            document.getElementById('riemannExactOutput').innerText = 'Unsupported for this function';
+        }
+    } else {
+        document.getElementById('riemannExactOutput').innerText = '--';
+    }
+}
+
+function calculateTaylorSeries() {
+    let expr = document.getElementById('taylorExpr').value.trim();
+    let variable = document.getElementById('taylorVar').value.trim() || 'x';
+    let a = parseFloat(document.getElementById('taylorA').value);
+    let terms = parseInt(document.getElementById('taylorN').value);
+    let ast = parseSymbolicExpression(expr);
+    if (!ast || isNaN(a) || isNaN(terms) || terms < 1) {
+        document.getElementById('taylorSeries').innerText = 'Error';
+        document.getElementById('taylorApprox').innerText = 'Error';
+        return;
+    }
+    let seriesParts = [];
+    let approxParts = [];
+    let currentAst = ast;
+    for (let k = 0; k < terms; k++) {
+        let derived = k === 0 ? currentAst : differentiateNode(currentAst, variable);
+        if (!derived) {
+            document.getElementById('taylorSeries').innerText = 'Unsupported derivatives';
+            document.getElementById('taylorApprox').innerText = 'Unsupported';
+            return;
+        }
+        let valueAtA = evaluateSymbolicNode(simplifyNode(derived), variable, a);
+        if (!isFinite(valueAtA)) {
+            document.getElementById('taylorSeries').innerText = 'Unsupported at expansion point';
+            document.getElementById('taylorApprox').innerText = 'Unsupported';
+            return;
+        }
+        let coef = valueAtA / factorial(k);
+        let term = ''; 
+        if (k === 0) term = coef.toFixed(6);
+        else {
+            let sign = coef < 0 ? ' - ' : ' + ';
+            let absCoef = Math.abs(coef);
+            let coefText = absCoef.toFixed(6);
+            if (absCoef === 1) coefText = '';
+            term = sign + coefText + (coefText === '' ? '' : '*') + '(' + variable + (a === 0 ? '' : ' - ' + a) + ')';
+            if (k > 1) term += '^' + k;
+        }
+        seriesParts.push(term);
+        approxParts.push(coef.toFixed(6) + '*' + '(' + variable + (a === 0 ? '' : ' - ' + a) + ')' + (k > 1 ? '^' + k : ''));
+        currentAst = differentiateNode(currentAst, variable);
+    }
+    let seriesText = seriesParts.join('').replace(/^ \+ /, '');
+    document.getElementById('taylorSeries').innerText = seriesText;
+    document.getElementById('taylorApprox').innerText = seriesText;
+}
+
+function factorial(n) {
+    if (n < 0) return NaN;
+    let result = 1;
+    for (let i = 2; i <= n; i++) result *= i;
+    return result;
+}
+
+function evaluateSymbolicNode(node, variable, value) {
+    if (!node) return NaN;
+    switch (node.type) {
+        case 'number': return node.value;
+        case 'variable': return node.name === variable ? value : NaN;
+        case 'unary': return node.op === '-' ? -evaluateSymbolicNode(node.value, variable, value) : evaluateSymbolicNode(node.value, variable, value);
+        case 'binary': {
+            let left = evaluateSymbolicNode(node.left, variable, value);
+            let right = evaluateSymbolicNode(node.right, variable, value);
+            if (!isFinite(left) || !isFinite(right)) return NaN;
+            switch (node.op) {
+                case '+': return left + right;
+                case '-': return left - right;
+                case '*': return left * right;
+                case '/': return right !== 0 ? left / right : NaN;
+                case '^': return Math.pow(left, right);
+            }
+            return NaN;
+        }
+        case 'func': {
+            let arg = evaluateSymbolicNode(node.arg, variable, value);
+            if (!isFinite(arg)) return NaN;
+            switch (node.name) {
+                case 'sin': return Math.sin(arg);
+                case 'cos': return Math.cos(arg);
+                case 'tan': return Math.tan(arg);
+                case 'exp': return Math.exp(arg);
+                case 'ln': return arg > 0 ? Math.log(arg) : NaN;
+                case 'sqrt': return arg >= 0 ? Math.sqrt(arg) : NaN;
+                default: return NaN;
+            }
+        }
+    }
+    return NaN;
+}
+
+function parseSymbolicExpression(expr) {
+    if (typeof expr !== 'string') return null;
+    expr = expr.replace(/\s+/g, '').replace(/√/g, 'sqrt');
+    let tokens = [];
+    let i = 0;
+    while (i < expr.length) {
+        let ch = expr[i];
+        if (/[0-9.]/.test(ch)) {
+            let num = ch;
+            i++;
+            while (i < expr.length && /[0-9.]/.test(expr[i])) {
+                num += expr[i++];
+            }
+            tokens.push({ type: 'number', value: parseFloat(num) });
+            continue;
+        }
+        if (/[A-Za-z]/.test(ch)) {
+            let name = ch;
+            i++;
+            while (i < expr.length && /[A-Za-z0-9]/.test(expr[i])) {
+                name += expr[i++];
+            }
+            tokens.push({ type: 'name', value: name.toLowerCase() });
+            continue;
+        }
+        if ('+-*/^(),'.includes(ch)) {
+            tokens.push({ type: 'op', value: ch });
+            i++;
+            continue;
+        }
+        return null;
+    }
+    let fixed = [];
+    for (let j = 0; j < tokens.length; j++) {
+        let token = tokens[j];
+        let prev = fixed[fixed.length - 1];
+        if (prev) {
+            let needsMul = false;
+            if (prev.type === 'number' && (token.type === 'name' || (token.type === 'op' && token.value === '('))) {
+                needsMul = true;
+            }
+            if (prev.type === 'name' && token.type === 'name') {
+                needsMul = true;
+            }
+            if (prev.type === 'op' && prev.value === ')' && (token.type === 'name' || (token.type === 'op' && token.value === '('))) {
+                needsMul = true;
+            }
+            if (needsMul) {
+                fixed.push({ type: 'op', value: '*' });
+            }
+        }
+        fixed.push(token);
+    }
+    tokens = fixed;
+
+    let pos = 0;
+    function peek() { return tokens[pos]; }
+    function consume(expected) {
+        if (tokens[pos] && tokens[pos].value === expected) {
+            pos++;
+            return true;
+        }
+        return false;
+    }
+    function parsePrimary() {
+        let token = peek();
+        if (!token) return null;
+        if (token.type === 'number') {
+            pos++;
+            return { type: 'number', value: token.value };
+        }
+        if (token.type === 'name') {
+            pos++;
+            if (peek() && peek().type === 'op' && peek().value === '(') {
+                pos++;
+                let arg = parseAddSub();
+                if (!arg || !consume(')')) return null;
+                return { type: 'func', name: token.value, arg };
+            }
+            return { type: 'variable', name: token.value };
+        }
+        if (token.type === 'op' && token.value === '(') {
+            pos++;
+            let node = parseAddSub();
+            if (!node || !consume(')')) return null;
+            return node;
+        }
+        return null;
+    }
+    function parseUnary() {
+        if (peek() && peek().type === 'op' && (peek().value === '+' || peek().value === '-')) {
+            let op = peek().value;
+            pos++;
+            let node = parseUnary();
+            if (!node) return null;
+            return op === '-' ? { type: 'unary', op: '-', value: node } : node;
+        }
+        return parsePrimary();
+    }
+    function parsePower() {
+        let node = parseUnary();
+        if (!node) return null;
+        while (peek() && peek().type === 'op' && peek().value === '^') {
+            pos++;
+            let right = parsePower();
+            if (!right) return null;
+            node = { type: 'binary', op: '^', left: node, right };
+        }
+        return node;
+    }
+    function parseMulDiv() {
+        let node = parsePower();
+        if (!node) return null;
+        while (peek() && peek().type === 'op' && (peek().value === '*' || peek().value === '/')) {
+            let op = peek().value;
+            pos++;
+            let right = parsePower();
+            if (!right) return null;
+            node = { type: 'binary', op, left: node, right };
+        }
+        return node;
+    }
+    function parseAddSub() {
+        let node = parseMulDiv();
+        if (!node) return null;
+        while (peek() && peek().type === 'op' && (peek().value === '+' || peek().value === '-')) {
+            let op = peek().value;
+            pos++;
+            let right = parseMulDiv();
+            if (!right) return null;
+            node = { type: 'binary', op, left: node, right };
+        }
+        return node;
+    }
+    let root = parseAddSub();
+    return pos === tokens.length ? root : null;
+}
+
+function differentiateNode(node, variable) {
+    if (!node) return null;
+    if (node.type === 'number') return { type: 'number', value: 0 };
+    if (node.type === 'variable') return { type: 'number', value: node.name === variable ? 1 : 0 };
+    if (node.type === 'unary') {
+        let d = differentiateNode(node.value, variable);
+        if (!d) return null;
+        return node.op === '-' ? { type: 'unary', op: '-', value: d } : d;
+    }
+    if (node.type === 'binary') {
+        let u = node.left;
+        let v = node.right;
+        let du = differentiateNode(u, variable);
+        let dv = differentiateNode(v, variable);
+        switch (node.op) {
+            case '+':
+            case '-':
+                if (!du || !dv) return null;
+                return { type: 'binary', op: node.op, left: du, right: dv };
+            case '*':
+                if (!du || !dv) return null;
+                return {
+                    type: 'binary', op: '+',
+                    left: { type: 'binary', op: '*', left: du, right: v },
+                    right: { type: 'binary', op: '*', left: u, right: dv }
+                };
+            case '/':
+                if (!du || !dv) return null;
+                return {
+                    type: 'binary', op: '/',
+                    left: {
+                        type: 'binary', op: '-',
+                        left: { type: 'binary', op: '*', left: du, right: v },
+                        right: { type: 'binary', op: '*', left: u, right: dv }
+                    },
+                    right: { type: 'binary', op: '^', left: v, right: { type: 'number', value: 2 } }
+                };
+            case '^':
+                if (v.type === 'number') {
+                    let newExp = { type: 'number', value: v.value - 1 };
+                    let expo = { type: 'binary', op: '^', left: u, right: newExp };
+                    let coef = { type: 'number', value: v.value };
+                    return { type: 'binary', op: '*', left: { type: 'binary', op: '*', left: coef, right: expo }, right: du || { type: 'number', value: 0 } };
+                }
+                if (u.type === 'number') {
+                    if (!dv) return null;
+                    return {
+                        type: 'binary', op: '*',
+                        left: { type: 'binary', op: '^', left: u, right: v },
+                        right: { type: 'binary', op: '*', left: dv, right: { type: 'func', name: 'ln', arg: u } }
+                    };
+                }
+                if (!du || !dv) return null;
+                return {
+                    type: 'binary', op: '*',
+                    left: { type: 'binary', op: '^', left: u, right: v },
+                    right: {
+                        type: 'binary', op: '+',
+                        left: { type: 'binary', op: '*', left: dv, right: { type: 'func', name: 'ln', arg: u } },
+                        right: { type: 'binary', op: '*', left: v, right: { type: 'binary', op: '/', left: du, right: u } }
+                    }
+                };
+        }
+    }
+    if (node.type === 'func') {
+        let darg = differentiateNode(node.arg, variable);
+        if (!darg) return null;
+        let inner = darg;
+        switch (node.name) {
+            case 'sin':
+                return { type: 'binary', op: '*', left: { type: 'func', name: 'cos', arg: node.arg }, right: inner };
+            case 'cos':
+                return { type: 'binary', op: '*', left: { type: 'unary', op: '-', value: { type: 'func', name: 'sin', arg: node.arg } }, right: inner };
+            case 'tan':
+                return { type: 'binary', op: '*', left: { type: 'binary', op: '^', left: { type: 'func', name: 'sec', arg: node.arg }, right: { type: 'number', value: 2 } }, right: inner };
+            case 'cot':
+                return { type: 'binary', op: '*', left: { type: 'unary', op: '-', value: { type: 'binary', op: '^', left: { type: 'func', name: 'csc', arg: node.arg }, right: { type: 'number', value: 2 } } }, right: inner };
+            case 'sec':
+                return { type: 'binary', op: '*', left: { type: 'binary', op: '*', left: { type: 'func', name: 'sec', arg: node.arg }, right: { type: 'func', name: 'tan', arg: node.arg } }, right: inner };
+            case 'csc':
+                return { type: 'binary', op: '*', left: { type: 'unary', op: '-', value: { type: 'binary', op: '*', left: { type: 'func', name: 'csc', arg: node.arg }, right: { type: 'func', name: 'cot', arg: node.arg } } }, right: inner };
+            case 'exp':
+                return { type: 'binary', op: '*', left: { type: 'func', name: 'exp', arg: node.arg }, right: inner };
+            case 'ln':
+            case 'log':
+                return { type: 'binary', op: '*', left: { type: 'binary', op: '/', left: inner, right: node.arg }, right: { type: 'number', value: 1 } };
+            case 'sqrt':
+                return { type: 'binary', op: '*', left: { type: 'binary', op: '/', left: inner, right: { type: 'binary', op: '*', left: { type: 'number', value: 2 }, right: { type: 'func', name: 'sqrt', arg: node.arg } } }, right: { type: 'number', value: 1 } };
+        }
+    }
+    return null;
+}
+
+function integrateNode(node, variable) {
+    if (!node) return null;
+    if (node.type === 'number') {
+        return { type: 'binary', op: '*', left: node, right: { type: 'variable', name: variable } };
+    }
+    if (node.type === 'variable') {
+        return { type: 'binary', op: '/', left: { type: 'binary', op: '^', left: { type: 'variable', name: variable }, right: { type: 'number', value: 2 } }, right: { type: 'number', value: 2 } };
+    }
+    if (node.type === 'unary' && node.op === '-') {
+        let inner = integrateNode(node.value, variable);
+        if (!inner) return null;
+        return { type: 'unary', op: '-', value: inner };
+    }
+    if (node.type === 'binary') {
+        if (node.op === '+' || node.op === '-') {
+            let left = integrateNode(node.left, variable);
+            let right = integrateNode(node.right, variable);
+            if (!left || !right) return null;
+            return { type: 'binary', op: node.op, left, right };
+        }
+        if (node.op === '*') {
+            let constant = null;
+            let other = null;
+            if (node.left.type === 'number') {
+                constant = node.left;
+                other = node.right;
+            } else if (node.right.type === 'number') {
+                constant = node.right;
+                other = node.left;
+            }
+            if (constant && other) {
+                let integrated = integrateNode(other, variable);
+                if (!integrated) return null;
+                return { type: 'binary', op: '*', left: constant, right: integrated };
+            }
+            return null;
+        }
+        if (node.op === '/') {
+            if (node.left.type === 'number' && node.right.type === 'variable' && node.right.name === variable) {
+                return { type: 'binary', op: '*', left: node.left, right: { type: 'func', name: 'ln', arg: { type: 'variable', name: variable } } };
+            }
+            return null;
+        }
+        if (node.op === '^' && node.left.type === 'variable' && node.left.name === variable && node.right.type === 'number') {
+            let n = node.right.value;
+            if (n === -1) {
+                return { type: 'func', name: 'ln', arg: { type: 'variable', name: variable } };
+            }
+            return { type: 'binary', op: '/', left: { type: 'binary', op: '^', left: { type: 'variable', name: variable }, right: { type: 'number', value: n + 1 } }, right: { type: 'number', value: n + 1 } };
+        }
+        return null;
+    }
+    if (node.type === 'func') {
+        let linear = extractLinearCoefficient(node.arg, variable);
+        if (linear) {
+            let k = linear.coef;
+            let arg = node.arg;
+            switch (node.name) {
+                case 'sin':
+                    return { type: 'binary', op: '/', left: { type: 'unary', op: '-', value: { type: 'func', name: 'cos', arg } }, right: { type: 'number', value: k } };
+                case 'cos':
+                    return { type: 'binary', op: '/', left: { type: 'func', name: 'sin', arg }, right: { type: 'number', value: k } };
+                case 'exp':
+                    return { type: 'binary', op: '/', left: { type: 'func', name: 'exp', arg }, right: { type: 'number', value: k } };
+            }
+        }
+        if (node.name === 'sqrt' && node.arg.type === 'variable' && node.arg.name === variable) {
+            return { type: 'binary', op: '/', left: { type: 'binary', op: '^', left: { type: 'variable', name: variable }, right: { type: 'number', value: 1.5 } }, right: { type: 'number', value: 1.5 } };
+        }
+        return null;
+    }
+    return null;
+}
+
+function extractLinearCoefficient(node, variable) {
+    if (node.type === 'variable' && node.name === variable) {
+        return { coef: 1 };
+    }
+    if (node.type === 'unary' && node.op === '-') {
+        let inner = extractLinearCoefficient(node.value, variable);
+        return inner ? { coef: -inner.coef } : null;
+    }
+    if (node.type === 'binary' && node.op === '*') {
+        if (node.left.type === 'number' && node.right.type === 'variable' && node.right.name === variable) {
+            return { coef: node.left.value };
+        }
+        if (node.right.type === 'number' && node.left.type === 'variable' && node.left.name === variable) {
+            return { coef: node.right.value };
+        }
+    }
+    return null;
+}
+
+function simplifyNode(node) {
+    if (!node) return null;
+    if (node.type === 'number' || node.type === 'variable') return node;
+    if (node.type === 'unary') {
+        let value = simplifyNode(node.value);
+        if (!value) return null;
+        if (value.type === 'number') return { type: 'number', value: -value.value };
+        return { type: 'unary', op: node.op, value };
+    }
+    if (node.type === 'binary') {
+        let left = simplifyNode(node.left);
+        let right = simplifyNode(node.right);
+        if (!left || !right) return null;
+        if (left.type === 'number' && right.type === 'number') {
+            switch (node.op) {
+                case '+': return { type: 'number', value: left.value + right.value };
+                case '-': return { type: 'number', value: left.value - right.value };
+                case '*': return { type: 'number', value: left.value * right.value };
+                case '/': return right.value !== 0 ? { type: 'number', value: left.value / right.value } : node;
+                case '^': return { type: 'number', value: Math.pow(left.value, right.value) };
+            }
+        }
+        if (node.op === '+') {
+            if (isZero(left)) return right;
+            if (isZero(right)) return left;
+        }
+        if (node.op === '-') {
+            if (isZero(right)) return left;
+            if (left.type === 'number' && right.type === 'number') return { type: 'number', value: left.value - right.value };
+        }
+        if (node.op === '*') {
+            if (isZero(left) || isZero(right)) return { type: 'number', value: 0 };
+            if (isOne(left)) return right;
+            if (isOne(right)) return left;
+        }
+        if (node.op === '/') {
+            if (isZero(left)) return { type: 'number', value: 0 };
+            if (isOne(right)) return left;
+        }
+        if (node.op === '^') {
+            if (isZero(right)) return { type: 'number', value: 1 };
+            if (isOne(right)) return left;
+        }
+        return { type: 'binary', op: node.op, left, right };
+    }
+    if (node.type === 'func') {
+        let arg = simplifyNode(node.arg);
+        if (!arg) return null;
+        return { type: 'func', name: node.name, arg };
+    }
+    return null;
+}
+
+function isZero(node) {
+    return node.type === 'number' && node.value === 0;
+}
+function isOne(node) {
+    return node.type === 'number' && node.value === 1;
+}
+
+function stringifyNode(node) {
+    if (!node) return '';
+    if (node.type === 'number') return Number.isInteger(node.value) ? node.value.toString() : node.value.toString();
+    if (node.type === 'variable') return node.name;
+    if (node.type === 'unary') {
+        let s = stringifyNode(node.value);
+        return node.op + (node.value.type === 'binary' ? '(' + s + ')' : s);
+    }
+    if (node.type === 'func') {
+        return node.name + '(' + stringifyNode(node.arg) + ')';
+    }
+    if (node.type === 'binary') {
+        let left = stringifyNode(node.left);
+        let right = stringifyNode(node.right);
+        let needParensLeft = node.left.type === 'binary' && precedence(node.left.op) < precedence(node.op);
+        let needParensRight = node.right.type === 'binary' && (precedence(node.right.op) < precedence(node.op) || (node.op === '^' && precedence(node.right.op) <= precedence(node.op)));
+        if (needParensLeft) left = '(' + left + ')';
+        if (needParensRight) right = '(' + right + ')';
+        return left + node.op + right;
+    }
+    return '';
+}
+
+function precedence(op) {
+    if (op === '+' || op === '-') return 1;
+    if (op === '*' || op === '/') return 2;
+    if (op === '^') return 3;
+    return 4;
+}
 </script>
 </body>
 </html>
-
-
-
-
 
