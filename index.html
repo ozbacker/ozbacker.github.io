@@ -47,6 +47,81 @@
 
         .retro-button:active { border-style: inset; }
 
+        .physics-win7 {
+            background: linear-gradient(180deg, #e8effd, #b8cff6);
+            border: 1px solid #526fac;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 20px auto;
+            max-width: 940px;
+        }
+        .physics-win7 .physics-titlebar {
+            background: linear-gradient(90deg, #2f5db4, #7fa4e7);
+            color: #ffffff;
+            padding: 6px 10px;
+            font-weight: bold;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #8da6de;
+            border-radius: 6px 6px 0 0;
+            margin-bottom: 10px;
+        }
+        .physics-win7 .title-buttons {
+            display: flex;
+            gap: 4px;
+        }
+        .physics-win7 .title-buttons .title-btn {
+            width: 16px;
+            height: 16px;
+            border: 1px solid #ffffff;
+            background: linear-gradient(180deg, #f4f7ff, #c7d7f9);
+            color: #222222;
+            text-align: center;
+            line-height: 16px;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: default;
+        }
+        .physics-win7 > div:not(.physics-titlebar) {
+            background: #f7f8ff !important;
+            border: 1px solid #8aa4d9 !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+            border-radius: 4px !important;
+            margin: 0 auto 20px auto !important;
+            padding: 12px !important;
+            max-width: 500px !important;
+            color: #000000 !important;
+        }
+        .physics-win7 > div:not(.physics-titlebar) p {
+            font-weight: bold;
+            color: #0e2f6d;
+        }
+        .physics-win7 label { color: #142d5b; }
+        .physics-win7 input, .physics-win7 select {
+            border: 1px solid #7b95cc;
+            background: #ffffff;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+            color: #000000;
+        }
+        .physics-win7 .retro-button {
+            background: linear-gradient(180deg, #f8fbff, #dce5f6);
+            border: 1px solid #7891cc;
+            color: #102e6b;
+        }
+        .physics-win7 .retro-button:active { border-style: inset; }
+        .physics-win7 div[id$="Result"] {
+            background: #ffffff !important;
+            border: 1px solid #9cb0d9 !important;
+        }
+        .physics-win7 hr {
+            border: none !important;
+            border-top: 1px solid #8aa4d9 !important;
+            margin: 20px 0 !important;
+        }
+
         #result, #quadResult, #lnResult, #sqrtApproxResult, #areaResult, #area3DResult, #reverseResult, #diagonalResult, #stdResult, #volumeResult, #trigResult, #distanceResult, #halfDoubleResult, #compoundResult, #binomialResult, #binomialExpand, #identityResult, #gcdLcmResult, #logResult, #matrixResult, #arcResult, #pytagorasResult, #functionResult {
             margin-top: 15px;
             padding: 10px;
@@ -2324,6 +2399,61 @@ function calculateOrbit() {
         </div>
         <hr style="border: 1px solid #808080; margin: 20px 0;">
         <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Time Dilation Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="timeDilationTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="t">Dilated time (t)</option>
+                        <option value="t0">Proper time (t₀)</option>
+                        <option value="v">Velocity (v)</option>
+                    </select>
+                </label>
+                <label style="display: block;">Proper time (t₀) [s]:
+                    <input type="number" id="timeDilationT0" value="1" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Dilated time (t) [s]:
+                    <input type="number" id="timeDilationT" value="1.25" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Velocity (v) [m/s]:
+                    <input type="number" id="timeDilationV" value="100000000" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Speed of light (c) [m/s]:
+                    <input type="number" id="timeDilationC" value="299792458" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateTimeDilation()">Calculate</button>
+            </div>
+            <div id="timeDilationResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="timeDilationOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Mass–Energy Equivalence Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="emcTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="E">Energy (E)</option>
+                        <option value="m">Mass (m)</option>
+                        <option value="c">Speed of light (c)</option>
+                    </select>
+                </label>
+                <label style="display: block;">Energy (E) [J]:
+                    <input type="text" id="emcE" value="10" placeholder="1, 2, 3, 100" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Mass (m) [kg]:
+                    <input type="text" id="emcM" value="1" placeholder="1, 2, 3" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Speed of light (c) [m/s]:
+                    <input type="text" id="emcC" value="299792458" placeholder="299792458" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateEMC()">Calculate</button>
+            </div>
+            <div id="emcResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="emcOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
             <p style="font-weight: bold; margin: 0 0 10px 0;">Kinematic Equation Solver</p>
             <div style="display: grid; gap: 10px; font-size: 12px;">
                 <label style="display: block;">Solve for:
@@ -2387,6 +2517,7 @@ function calculateOrbit() {
                 <div>KE before: <span id="keBefore" style="font-weight: bold; color: #000080;">--</span> J</div>
                 <div>KE after: <span id="keAfter" style="font-weight: bold; color: #000080;">--</span> J</div>
             </div>
+        </div>
         </div>
 <script>
 function calculateJoulesHeat() {
@@ -2717,6 +2848,70 @@ function calculateCenterOfMass() {
     let yCom = masses.reduce((sum, m, i) => sum + m * ys[i], 0) / totalMass;
     document.getElementById('comXOutput').innerText = xCom.toFixed(3);
     document.getElementById('comYOutput').innerText = yCom.toFixed(3);
+}
+
+function calculateTimeDilation() {
+    let target = document.getElementById('timeDilationTarget').value;
+    let t0 = parseFloat(document.getElementById('timeDilationT0').value);
+    let t = parseFloat(document.getElementById('timeDilationT').value);
+    let v = parseFloat(document.getElementById('timeDilationV').value);
+    let c = parseFloat(document.getElementById('timeDilationC').value);
+
+    if (isNaN(c) || c <= 0) {
+        alert('Invalid speed of light value');
+        return;
+    }
+    let result = null;
+    let beta2 = Math.pow(v / c, 2);
+    if (beta2 >= 1) {
+        alert('Velocity must be less than the speed of light');
+        return;
+    }
+    let gamma = 1 / Math.sqrt(1 - beta2);
+
+    if (target === 't') {
+        if (!isNaN(t0)) {
+            result = gamma * t0;
+        }
+    } else if (target === 't0') {
+        if (!isNaN(t)) {
+            result = t / gamma;
+        }
+    } else if (target === 'v') {
+        if (!isNaN(t0) && !isNaN(t) && t > t0) {
+            let ratio = t0 / t;
+            result = c * Math.sqrt(1 - ratio * ratio);
+        }
+    }
+    document.getElementById('timeDilationOutput').innerText = (result === null || isNaN(result)) ? 'Error: insufficient or invalid inputs' : (target === 'v' ? result.toFixed(3) + ' m/s' : result.toFixed(6) + ' s');
+}
+
+function calculateEMC() {
+    let target = document.getElementById('emcTarget').value;
+    let E = parseFloat(document.getElementById('emcE').value);
+    let m = parseFloat(document.getElementById('emcM').value);
+    let c = parseFloat(document.getElementById('emcC').value);
+    let result = null;
+
+    if (isNaN(c) || c <= 0) {
+        alert('Invalid speed of light value');
+        return;
+    }
+
+    if (target === 'E') {
+        if (!isNaN(m)) {
+            result = m * c * c;
+        }
+    } else if (target === 'm') {
+        if (!isNaN(E)) {
+            result = E / (c * c);
+        }
+    } else if (target === 'c') {
+        if (!isNaN(E) && !isNaN(m) && m > 0) {
+            result = Math.sqrt(E / m);
+        }
+    }
+    document.getElementById('emcOutput').innerText = (result === null || isNaN(result)) ? 'Error: insufficient or invalid inputs' : (target === 'c' ? result.toFixed(3) + ' m/s' : result.toExponential(6) + (target === 'E' ? ' J' : ' kg'));
 }
 
 function calculateSymbolicDerivative() {
