@@ -2725,6 +2725,55 @@ function calculateOrbit() {
         </div>
         <hr style="border: 1px solid #808080; margin: 20px 0;">
         <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Mechanical Work Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Formula:
+                    <select id="workFormula" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="force_distance">Work = F · d</option>
+                        <option value="force_distance_cos">Work = F d cos(θ)</option>
+                        <option value="delta_ke">Work = ΔKE</option>
+                        <option value="gravitational_potential">Work = m g h</option>
+                        <option value="power_time">Work = P t</option>
+                    </select>
+                </label>
+                <label style="display: block;">Force (F) [N]:
+                    <input type="number" id="workF" value="10" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Distance (d) [m]:
+                    <input type="number" id="workD" value="5" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Angle (θ) [deg]:
+                    <input type="number" id="workTheta" value="0" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Mass (m) [kg]:
+                    <input type="number" id="workM" value="2" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Height change (Δh) [m]:
+                    <input type="number" id="workH" value="10" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Initial velocity (u) [m/s]:
+                    <input type="number" id="workU" value="2" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Final velocity (v) [m/s]:
+                    <input type="number" id="workV" value="8" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Power (P) [W]:
+                    <input type="number" id="workP" value="20" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Time (t) [s]:
+                    <input type="number" id="workT" value="4" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Gravity (g) [m/s²]:
+                    <input type="number" id="workG" value="9.81" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateMechanicalWork()">Calculate</button>
+            </div>
+            <div id="workResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Work: <span id="workOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
             <p style="font-weight: bold; margin: 0 0 10px 0;">Momentum & Collision Calculator</p>
             <div style="display: grid; gap: 10px; font-size: 12px;">
                 <label style="display: block;">Mass 1 (m₁) [kg]:
@@ -2841,6 +2890,38 @@ function calculateKinematics() {
             break;
     }
     document.getElementById('kinematicOutput').innerText = isNaN(result) || result === null ? 'Error: insufficient or invalid inputs' : result.toString();
+}
+
+function calculateMechanicalWork() {
+    let formula = document.getElementById('workFormula').value;
+    let F = parseFloat(document.getElementById('workF').value);
+    let d = parseFloat(document.getElementById('workD').value);
+    let theta = parseFloat(document.getElementById('workTheta').value);
+    let m = parseFloat(document.getElementById('workM').value);
+    let h = parseFloat(document.getElementById('workH').value);
+    let u = parseFloat(document.getElementById('workU').value);
+    let v = parseFloat(document.getElementById('workV').value);
+    let P = parseFloat(document.getElementById('workP').value);
+    let t = parseFloat(document.getElementById('workT').value);
+    let g = parseFloat(document.getElementById('workG').value);
+    let result = null;
+
+    if (formula === 'force_distance') {
+        if (!isNaN(F) && !isNaN(d)) result = F * d;
+    } else if (formula === 'force_distance_cos') {
+        if (!isNaN(F) && !isNaN(d) && !isNaN(theta)) {
+            let rad = theta * Math.PI / 180;
+            result = F * d * Math.cos(rad);
+        }
+    } else if (formula === 'delta_ke') {
+        if (!isNaN(m) && !isNaN(u) && !isNaN(v)) result = 0.5 * m * (v * v - u * u);
+    } else if (formula === 'gravitational_potential') {
+        if (!isNaN(m) && !isNaN(g) && !isNaN(h)) result = m * g * h;
+    } else if (formula === 'power_time') {
+        if (!isNaN(P) && !isNaN(t)) result = P * t;
+    }
+
+    document.getElementById('workOutput').innerText = (result === null || isNaN(result)) ? 'Error: insufficient or invalid inputs' : result.toFixed(6) + ' J';
 }
 
 function calculateMomentumCollision() {
