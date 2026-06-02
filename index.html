@@ -2543,6 +2543,88 @@ function calculateOrbit() {
         </div>
         <hr style="border: 1px solid #808080; margin: 20px 0;">
         <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">RC Circuit Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="rcTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="tau">Time constant (τ)</option>
+                        <option value="fc">Cutoff freq (f_c)</option>
+                        <option value="Xc">Capacitive reactance (Xc)</option>
+                        <option value="Z">Impedance |Z| at f</option>
+                    </select>
+                </label>
+                <label style="display: block;">Resistance (R) [Ω]:
+                    <input type="number" id="rcR" value="1000" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Capacitance (C) [F]:
+                    <input type="number" id="rcC" value="1e-6" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Frequency (f) [Hz]:
+                    <input type="number" id="rcF" value="1000" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateRCSolver()">Calculate</button>
+            </div>
+            <div id="rcResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="rcOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">RL Circuit Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="rlTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="tau">Time constant (τ)</option>
+                        <option value="Xl">Inductive reactance (Xl)</option>
+                        <option value="Z">Impedance |Z| at f</option>
+                    </select>
+                </label>
+                <label style="display: block;">Resistance (R) [Ω]:
+                    <input type="number" id="rlR" value="100" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Inductance (L) [H]:
+                    <input type="number" id="rlL" value="0.01" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Frequency (f) [Hz]:
+                    <input type="number" id="rlF" value="1000" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateRLSolver()">Calculate</button>
+            </div>
+            <div id="rlResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="rlOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Series RLC Circuit Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="rlcTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="fr">Resonant freq (f_r)</option>
+                        <option value="Z">Impedance |Z| at f</option>
+                        <option value="Q">Quality factor (Q)</option>
+                    </select>
+                </label>
+                <label style="display: block;">Resistance (R) [Ω]:
+                    <input type="number" id="rlcR" value="50" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Inductance (L) [H]:
+                    <input type="number" id="rlcL" value="0.01" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Capacitance (C) [F]:
+                    <input type="number" id="rlcC" value="1e-6" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Frequency (f) [Hz]:
+                    <input type="number" id="rlcF" value="1000" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateRLCSolver()">Calculate</button>
+            </div>
+            <div id="rlcResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="rlcOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
             <p style="font-weight: bold; margin: 0 0 10px 0;">Kinematic Equation Solver</p>
             <div style="display: grid; gap: 10px; font-size: 12px;">
                 <label style="display: block;">Solve for:
@@ -3086,6 +3168,71 @@ function calculateThinLens() {
         }
     }
     document.getElementById('lensOutput').innerText = (result === null || isNaN(result)) ? 'Error: insufficient or invalid inputs' : result.toFixed(6) + ' m';
+}
+
+function calculateRCSolver() {
+    let target = document.getElementById('rcTarget').value;
+    let R = parseFloat(document.getElementById('rcR').value);
+    let C = parseFloat(document.getElementById('rcC').value);
+    let f = parseFloat(document.getElementById('rcF').value);
+    let result = null;
+    if (target === 'tau') {
+        if (!isNaN(R) && !isNaN(C)) result = R * C;
+    } else if (target === 'fc') {
+        if (!isNaN(R) && !isNaN(C) && R * C !== 0) result = 1 / (2 * Math.PI * R * C);
+    } else if (target === 'Xc') {
+        if (!isNaN(f) && !isNaN(C) && f !== 0) result = 1 / (2 * Math.PI * f * C);
+    } else if (target === 'Z') {
+        if (!isNaN(R) && !isNaN(f) && !isNaN(C)) {
+            let Xc = (f === 0 || isNaN(f) || isNaN(C)) ? Infinity : 1 / (2 * Math.PI * f * C);
+            if (!isFinite(Xc)) result = Math.abs(R);
+            else result = Math.sqrt(R * R + Xc * Xc);
+        }
+    }
+    document.getElementById('rcOutput').innerText = (result === null || isNaN(result)) ? 'Error' : (isFinite(result) ? result.toExponential(6) : '∞');
+}
+
+function calculateRLSolver() {
+    let target = document.getElementById('rlTarget').value;
+    let R = parseFloat(document.getElementById('rlR').value);
+    let L = parseFloat(document.getElementById('rlL').value);
+    let f = parseFloat(document.getElementById('rlF').value);
+    let result = null;
+    if (target === 'tau') {
+        if (!isNaN(L) && !isNaN(R) && R !== 0) result = L / R;
+    } else if (target === 'Xl') {
+        if (!isNaN(f) && !isNaN(L)) result = 2 * Math.PI * f * L;
+    } else if (target === 'Z') {
+        if (!isNaN(R) && !isNaN(f) && !isNaN(L)) {
+            let Xl = 2 * Math.PI * f * L;
+            result = Math.sqrt(R * R + Xl * Xl);
+        }
+    }
+    document.getElementById('rlOutput').innerText = (result === null || isNaN(result)) ? 'Error' : (isFinite(result) ? result.toExponential(6) : '∞');
+}
+
+function calculateRLCSolver() {
+    let target = document.getElementById('rlcTarget').value;
+    let R = parseFloat(document.getElementById('rlcR').value);
+    let L = parseFloat(document.getElementById('rlcL').value);
+    let C = parseFloat(document.getElementById('rlcC').value);
+    let f = parseFloat(document.getElementById('rlcF').value);
+    let result = null;
+    if (target === 'fr') {
+        if (!isNaN(L) && !isNaN(C) && L > 0 && C > 0) result = 1 / (2 * Math.PI * Math.sqrt(L * C));
+    } else if (target === 'Z') {
+        if (!isNaN(R) && !isNaN(L) && !isNaN(C) && !isNaN(f)) {
+            let Xl = 2 * Math.PI * f * L;
+            let Xc = 1 / (2 * Math.PI * f * C);
+            result = Math.sqrt(R * R + Math.pow(Xl - Xc, 2));
+        }
+    } else if (target === 'Q') {
+        if (!isNaN(R) && !isNaN(L) && !isNaN(C) && R !== 0) {
+            // Q for series RLC = (1/R) * sqrt(L/C)
+            result = (1 / R) * Math.sqrt(L / C);
+        }
+    }
+    document.getElementById('rlcOutput').innerText = (result === null || isNaN(result)) ? 'Error' : (isFinite(result) ? result.toExponential(6) : '∞');
 }
 
 function calculateSymbolicDerivative() {
