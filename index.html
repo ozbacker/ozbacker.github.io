@@ -1518,6 +1518,42 @@ function simplifyExpression() {
         }
     }
 
+    // Also expand/contract binomial products and perfect-square binomials
+    if (factorized === expr) {
+        // match (A±B)(A±B) or (A±B)(A∓B)
+        let prod = expr.match(/^\(\s*([A-Za-z0-9_]+)\s*([+\-])\s*([A-Za-z0-9_]+)\s*\)\s*\(\s*([A-Za-z0-9_]+)\s*([+\-])\s*([A-Za-z0-9_]+)\s*\)$/);
+        if (prod) {
+            let A1 = prod[1], s1 = prod[2], B1 = prod[3];
+            let A2 = prod[4], s2 = prod[5], B2 = prod[6];
+            if (A1 === A2 && B1 === B2) {
+                if (s1 === s2) {
+                    // (A+B)(A+B) -> expand to A**2+2*A*B+B**2
+                    if (s1 === '+') {
+                        factorized = A1 + '**2+2*' + A1 + '*' + B1 + '+' + B1 + '**2';
+                    } else {
+                        factorized = A1 + '**2-2*' + A1 + '*' + B1 + '+' + B1 + '**2';
+                    }
+                } else {
+                    // (A+B)(A-B) -> A**2 - B**2
+                    factorized = A1 + '**2-' + B1 + '**2';
+                }
+            }
+        }
+    }
+
+    // Expand (A±B)**2 -> A**2 ± 2*A*B + B**2
+    if (factorized === expr) {
+        let sq = expr.match(/^\(\s*([A-Za-z0-9_]+)\s*([+\-])\s*([A-Za-z0-9_]+)\s*\)\*\*2$/);
+        if (sq) {
+            let A = sq[1], sign = sq[2], B = sq[3];
+            if (sign === '+') {
+                factorized = A + '**2+2*' + A + '*' + B + '+' + B + '**2';
+            } else {
+                factorized = A + '**2-2*' + A + '*' + B + '+' + B + '**2';
+            }
+        }
+    }
+
     // quadratic factoring for ax**2 + bx + c where variable is x
     let quad = expr.match(/^([+-]?(?:\d*\.?\d+|\d+)?)(?:x\*\*2)([+-](?:\d*\.?\d+|\d+))x([+-](?:\d*\.?\d+|\d+))$/i);
     if (quad && factorized === expr) {
@@ -2402,20 +2438,26 @@ function calculateFunctionPoints() {
     document.getElementById('functionResult').innerHTML = table;
 }
 </script>
-<div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 20px auto; padding: 15px; max-width: 800px; font-family: 'MS Sans Serif', Arial, sans-serif; text-align: left; color: #000000;">
+<div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 20px auto; padding: 15px; max-width: 900px; font-family: 'MS Sans Serif', Arial, sans-serif; text-align: left; color: #000000;">
     <h2 style="background: linear-gradient(90deg, #000080, #1084d0); color: white; padding: 3px 5px; margin-top: 0; font-size: 14px;">Documentation and Mathematical Guides</h2>
-    
+
     <h3>About the Windows 98 Web Math Suite</h3>
-    <p>Welcome to the ultimate vintage web-based suite of advanced mathematical solvers and geometric calculators. This tool is fully engineered to process complex algebraic formulas, algorithmic data arrays, trigonometric variables, and financial formulas directly inside a lightweight, client-side browser framework. By combining classic system aesthetics with contemporary engineering scripts, this application streamlines calculations for students, engineers, and digital analysts alike.</p>
-    
-    <h3>Understanding Algebraic Equations and Polynomial Solvers</h3>
-    <p>Algebra forms the foundational blueprint of higher mathematical modeling. Our integrated quadratic equation solver processes polynomials structured in the classic standard form: ax² + bx + c = 0. By executing the automated discriminant formula, the application computes precise real or complex roots instantly. For higher-degree constraints, the cubic equation solver decomposes complex polynomials to pinpoint exact intersection points across multi-dimensional coordinate fields.</p>
-    
-    <h3>Geometric Dynamics, Triangle Calculations, and Trigonometry</h3>
-    <p>Navigating spatial geography requires powerful calculation matrixes. The suite features a comprehensive Triangle Area Calculator utilizing Heron's Formula, which determines the exact geometric surface area using only three distinct side lengths. Furthermore, the Law of Sines and Law of Cosines modules permit user-inputs to map missing spatial vectors based on partial angular trajectories and dimensional parameters. From basic Pythagorean theorems to complex inverse hyperbolic configurations, these modules calculate structural vectors flawlessly.</p>
-    
-    <h3>Advanced Statistical Matrices and Logarithmic Progressions</h3>
-    <p>Modern data analysis relies heavily on standard deviation and matrix manipulations. Our dynamic matrix calculator handles array transformations, computing vector determinants across dynamic grids. Additionally, the algorithmic logarithm module processes calculations at any user-defined base, alongside linear approximations for radical systems and natural logarithm scales. This platform also features a dedicated compound interest tracking calculator, enabling precise financial predictions across varying chronological terms.</p>
+    <p>Welcome to the ultimate vintage web-based suite of advanced mathematical solvers and geometric calculators. This tool is fully engineered to process complex algebraic formulas, algorithmic data arrays, trigonometric variables, and financial formulas directly inside a lightweight, client-side browser framework. By combining classic system aesthetics with contemporary engineering scripts, this application streamlines calculations for students, engineers, and digital analysts alike. The interface keeps things compact and fast — everything runs client-side in your browser.</p>
+
+    <h3>Mathematics: Algebra, Polynomials, and Symbolic Tools</h3>
+    <p>Algebra forms the foundational blueprint of higher mathematical modeling. The suite includes a quadratic solver (ax² + bx + c = 0) producing real or complex roots, polynomial utilities for factorization, and a symbolic expression simplifier that accepts both normal and LaTeX-style inputs (e.g. <em>\frac{...}{...}</em>, <em>\sqrt{...}</em>). The simplifier handles difference-of-squares, perfect-square patterns, rationalization of square-rooted fractions, and returns both a simplified symbolic form and a simplest fractional value with a decimal approximation.</p>
+
+    <h3>Geometry & Trigonometry</h3>
+    <p>The geometry modules include Heron's formula for triangle areas (given three sides), the Law of Sines and Law of Cosines for solving triangles, degree/radian conversion, and utilities for common geometric constructs. These tools support both numeric and symbolic-style inputs for flexible problem solving.</p>
+
+    <h3>Physics & Engineering Modules</h3>
+    <p>This suite contains a growing set of physics calculators and circuit solvers: Ohm's law, series/parallel resistors, RC / RL / RLC characteristic calculations, Kirchhoff law helper, Coulomb and magnetic force calculators, kinematics and momentum/collision calculators, mechanical work and energy converters, gravitational time dilation, and orbital mechanics helpers. Each solver accepts straightforward numeric inputs and returns concise results; many also show alternate forms (symbolic simplification, fraction, and decimal).</p>
+
+    <h3>Advanced Numerical Tools & Matrices</h3>
+    <p>For data analysis and linear algebra, the suite offers small-matrix operations (determinant, inverse for common sizes), a dynamic matrix helper for array manipulations, and statistical utilities such as standard-deviation helpers. Logarithm utilities support arbitrary bases along with natural-log processing for scientific workflows.</p>
+
+    <h3>Extending the Suite</h3>
+    <p>New modules are added iteratively: expression simplification, LaTeX-aware input/output, fraction simplification, circuit analyzers, and physics solvers are all integrated into this single-file app. If you want additional features—symbolic derivatives, polynomial long division, matrix equation solvers, unit-aware calculations, or LaTeX export for results—tell me which ones and I'll add them in the same minimal inline style.</p>
 </div>
         <hr style="border: 1px solid #808080; margin: 20px 0;">
         <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
@@ -3033,6 +3075,122 @@ function calculateOrbit() {
         </div>
         <hr style="border: 1px solid #808080; margin: 20px 0;">
         <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Projectile Motion Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="projectileTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="range">Range</option>
+                        <option value="height">Max height</option>
+                        <option value="time">Time of flight</option>
+                    </select>
+                </label>
+                <label style="display: block;">Initial speed (v₀) [m/s]:
+                    <input type="number" id="projectileV0" value="20" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Angle (θ) [degrees]:
+                    <input type="number" id="projectileAngle" value="45" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Gravity (g) [m/s²]:
+                    <input type="number" id="projectileG" value="9.81" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateProjectile()">Calculate</button>
+            </div>
+            <div id="projectileResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="projectileOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Buoyancy Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Fluid density (ρ) [kg/m³]:
+                    <input type="number" id="buoyancyRho" value="1000" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Displaced volume (V) [m³]:
+                    <input type="number" id="buoyancyVolume" value="0.1" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Gravity (g) [m/s²]:
+                    <input type="number" id="buoyancyG" value="9.81" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateBuoyancy()">Calculate</button>
+            </div>
+            <div id="buoyancyResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="buoyancyOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Bernoulli Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="bernoulliTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="p2">Pressure p₂</option>
+                        <option value="v2">Velocity v₂</option>
+                        <option value="h2">Height h₂</option>
+                    </select>
+                </label>
+                <label style="display: block;">Pressure p₁ [Pa]:
+                    <input type="number" id="bernoulliP1" value="101325" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Velocity v₁ [m/s]:
+                    <input type="number" id="bernoulliV1" value="2" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Height h₁ [m]:
+                    <input type="number" id="bernoulliH1" value="0" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Pressure p₂ [Pa]:
+                    <input type="number" id="bernoulliP2" value="100000" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Velocity v₂ [m/s]:
+                    <input type="number" id="bernoulliV2" value="4" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Height h₂ [m]:
+                    <input type="number" id="bernoulliH2" value="10" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Fluid density ρ [kg/m³]:
+                    <input type="number" id="bernoulliRho" value="1000" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Gravity (g) [m/s²]:
+                    <input type="number" id="bernoulliG" value="9.81" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateBernoulli()">Calculate</button>
+            </div>
+            <div id="bernoulliResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="bernoulliOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Continuity Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="continuityTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="A2">Area A₂</option>
+                        <option value="v2">Velocity v₂</option>
+                        <option value="A1">Area A₁</option>
+                        <option value="v1">Velocity v₁</option>
+                    </select>
+                </label>
+                <label style="display: block;">Area A₁ [m²]:
+                    <input type="number" id="continuityA1" value="0.1" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Velocity v₁ [m/s]:
+                    <input type="number" id="continuityV1" value="2" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Area A₂ [m²]:
+                    <input type="number" id="continuityA2" value="0.05" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Velocity v₂ [m/s]:
+                    <input type="number" id="continuityV2" value="4" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateContinuity()">Calculate</button>
+            </div>
+            <div id="continuityResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="continuityOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
             <p style="font-weight: bold; margin: 0 0 10px 0;">Mechanical Work Calculator</p>
             <div style="display: grid; gap: 10px; font-size: 12px;">
                 <label style="display: block;">Formula:
@@ -3198,6 +3356,101 @@ function calculateKinematics() {
             break;
     }
     document.getElementById('kinematicOutput').innerText = isNaN(result) || result === null ? 'Error: insufficient or invalid inputs' : result.toString();
+}
+
+function calculateProjectile() {
+    let target = document.getElementById('projectileTarget').value;
+    let v0 = parseValue('projectileV0');
+    let angle = parseValue('projectileAngle');
+    let g = parseValue('projectileG');
+    if (isNaN(v0) || isNaN(angle) || isNaN(g) || g === 0) {
+        document.getElementById('projectileOutput').innerText = 'Error: invalid input';
+        return;
+    }
+    let rad = angle * Math.PI / 180;
+    let sin2 = Math.sin(2 * rad);
+    let sin = Math.sin(rad);
+    let range = v0 * v0 * sin2 / g;
+    let height = v0 * v0 * sin * sin / (2 * g);
+    let time = 2 * v0 * sin / g;
+    let result = 'Error: insufficient or invalid inputs';
+    switch (target) {
+        case 'range':
+            result = 'Range ≈ ' + range.toFixed(6) + ' m';
+            break;
+        case 'height':
+            result = 'Max height ≈ ' + height.toFixed(6) + ' m';
+            break;
+        case 'time':
+            result = 'Time of flight ≈ ' + time.toFixed(6) + ' s';
+            break;
+    }
+    document.getElementById('projectileOutput').innerText = result;
+}
+
+function calculateBuoyancy() {
+    let rho = parseValue('buoyancyRho');
+    let volume = parseValue('buoyancyVolume');
+    let g = parseValue('buoyancyG');
+    if (isNaN(rho) || isNaN(volume) || isNaN(g)) {
+        document.getElementById('buoyancyOutput').innerText = 'Error: invalid input';
+        return;
+    }
+    let force = rho * volume * g;
+    let displacedMass = rho * volume;
+    document.getElementById('buoyancyOutput').innerText = 'Buoyant force ≈ ' + force.toFixed(6) + ' N, displaced mass ≈ ' + displacedMass.toFixed(6) + ' kg';
+}
+
+function calculateBernoulli() {
+    let target = document.getElementById('bernoulliTarget').value;
+    let p1 = parseValue('bernoulliP1');
+    let v1 = parseValue('bernoulliV1');
+    let h1 = parseValue('bernoulliH1');
+    let p2 = parseValue('bernoulliP2');
+    let v2 = parseValue('bernoulliV2');
+    let h2 = parseValue('bernoulliH2');
+    let rho = parseValue('bernoulliRho');
+    let g = parseValue('bernoulliG');
+    if (isNaN(rho) || isNaN(g)) {
+        document.getElementById('bernoulliOutput').innerText = 'Error: invalid density or gravity';
+        return;
+    }
+    let result = 'Error: insufficient or invalid inputs';
+    if (target === 'p2') {
+        if ([p1, v1, h1, v2, h2].every(v => !isNaN(v))) {
+            result = (p1 + 0.5 * rho * (v1 * v1 - v2 * v2) + rho * g * (h1 - h2)).toFixed(6) + ' Pa';
+        }
+    } else if (target === 'v2') {
+        if ([p1, p2, v1, h1, h2].every(v => !isNaN(v))) {
+            let value = v1 * v1 + 2 * (p1 - p2) / rho + 2 * g * (h1 - h2);
+            result = value >= 0 ? ('v₂ ≈ ' + Math.sqrt(value).toFixed(6) + ' m/s') : 'Error: negative square root';
+        }
+    } else if (target === 'h2') {
+        if ([p1, p2, v1, v2, h1].every(v => !isNaN(v))) {
+            let value = h1 + (p1 - p2) / (rho * g) + 0.5 * (v1 * v1 - v2 * v2) / g;
+            result = 'h₂ ≈ ' + value.toFixed(6) + ' m';
+        }
+    }
+    document.getElementById('bernoulliOutput').innerText = result;
+}
+
+function calculateContinuity() {
+    let target = document.getElementById('continuityTarget').value;
+    let A1 = parseValue('continuityA1');
+    let v1 = parseValue('continuityV1');
+    let A2 = parseValue('continuityA2');
+    let v2 = parseValue('continuityV2');
+    let result = 'Error: insufficient or invalid inputs';
+    if (target === 'A2' && !isNaN(A1) && !isNaN(v1) && !isNaN(v2) && v2 !== 0) {
+        result = 'A₂ ≈ ' + (A1 * v1 / v2).toFixed(6) + ' m²';
+    } else if (target === 'v2' && !isNaN(A1) && !isNaN(v1) && !isNaN(A2) && A2 !== 0) {
+        result = 'v₂ ≈ ' + (A1 * v1 / A2).toFixed(6) + ' m/s';
+    } else if (target === 'A1' && !isNaN(v1) && !isNaN(A2) && !isNaN(v2) && v1 !== 0) {
+        result = 'A₁ ≈ ' + (A2 * v2 / v1).toFixed(6) + ' m²';
+    } else if (target === 'v1' && !isNaN(A1) && !isNaN(A2) && !isNaN(v2) && A1 !== 0) {
+        result = 'v₁ ≈ ' + (A2 * v2 / A1).toFixed(6) + ' m/s';
+    }
+    document.getElementById('continuityOutput').innerText = result;
 }
 
 function calculateMechanicalWork() {
