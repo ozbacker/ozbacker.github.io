@@ -2445,13 +2445,13 @@ function calculateFunctionPoints() {
     <p>Welcome to the ultimate vintage web-based suite of advanced mathematical solvers and geometric calculators. This tool is fully engineered to process complex algebraic formulas, algorithmic data arrays, trigonometric variables, and financial formulas directly inside a lightweight, client-side browser framework. By combining classic system aesthetics with contemporary engineering scripts, this application streamlines calculations for students, engineers, and digital analysts alike. The interface keeps things compact and fast — everything runs client-side in your browser.</p>
 
     <h3>Mathematics: Algebra, Polynomials, and Symbolic Tools</h3>
-    <p>Algebra forms the foundational blueprint of higher mathematical modeling. The suite includes a quadratic solver (ax² + bx + c = 0) producing real or complex roots, polynomial utilities for factorization, and a symbolic expression simplifier that accepts both normal and LaTeX-style inputs (e.g. <em>\frac{...}{...}</em>, <em>\sqrt{...}</em>). The simplifier handles difference-of-squares, perfect-square patterns, rationalization of square-rooted fractions, and returns both a simplified symbolic form and a simplest fractional value with a decimal approximation.</p>
+    <p>Algebra forms the foundational blueprint of higher mathematical modeling. The suite includes a quadratic solver (ax² + bx + c = 0) producing real or complex roots, polynomial utilities for factorization, combinatorics helpers for factorials, permutations and combinations, and a symbolic expression simplifier that accepts both normal and LaTeX-style inputs (e.g. <em>\frac{...}{...}</em>, <em>\sqrt{...}</em>). The simplifier handles difference-of-squares, perfect-square patterns, rationalization of square-rooted fractions, and returns both a simplified symbolic form and a simplest fractional value with a decimal approximation.</p>
 
     <h3>Geometry & Trigonometry</h3>
     <p>The geometry modules include Heron's formula for triangle areas (given three sides), the Law of Sines and Law of Cosines for solving triangles, degree/radian conversion, and utilities for common geometric constructs. These tools support both numeric and symbolic-style inputs for flexible problem solving.</p>
 
     <h3>Physics & Engineering Modules</h3>
-    <p>This suite contains a growing set of physics calculators and circuit solvers: Ohm's law, series/parallel resistors, RC / RL / RLC characteristic calculations, Kirchhoff law helper, Coulomb and magnetic force calculators, kinematics and momentum/collision calculators, mechanical work and energy converters, gravitational time dilation, and orbital mechanics helpers. Each solver accepts straightforward numeric inputs and returns concise results; many also show alternate forms (symbolic simplification, fraction, and decimal).</p>
+    <p>This suite contains a growing set of physics calculators and circuit solvers: Ohm's law, series/parallel resistors, RC / RL / RLC characteristic calculations, Kirchhoff law helper, Coulomb and magnetic force calculators, kinematics and momentum/collision calculators, thermodynamics basics (PV = nRT, Q = m c ΔT), mechanical work and energy converters, gravitational time dilation, and orbital mechanics helpers. Each solver accepts straightforward numeric inputs and returns concise results; many also show alternate forms (symbolic simplification, fraction, and decimal).</p>
 
     <h3>Advanced Numerical Tools & Matrices</h3>
     <p>For data analysis and linear algebra, the suite offers small-matrix operations (determinant, inverse for common sizes), a dynamic matrix helper for array manipulations, and statistical utilities such as standard-deviation helpers. Logarithm utilities support arbitrary bases along with natural-log processing for scientific workflows.</p>
@@ -3191,6 +3191,84 @@ function calculateOrbit() {
         </div>
         <hr style="border: 1px solid #808080; margin: 20px 0;">
         <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Thermodynamics Basics Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Solve for:
+                    <select id="thermoTarget" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="pressure">Pressure (P)</option>
+                        <option value="volume">Volume (V)</option>
+                        <option value="moles">Moles (n)</option>
+                        <option value="temperature">Temperature (T)</option>
+                        <option value="heat">Heat (Q)</option>
+                        <option value="deltaT">Temperature change (ΔT)</option>
+                        <option value="specificHeat">Specific heat (c)</option>
+                    </select>
+                </label>
+                <label style="display: block;">Pressure (P) [Pa]:
+                    <input type="number" id="thermoP" value="101325" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Volume (V) [m³]:
+                    <input type="number" id="thermoV" value="0.0224" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Moles (n) [mol]:
+                    <input type="number" id="thermoN" value="1" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Temperature (T) [K]:
+                    <input type="number" id="thermoT" value="273.15" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Gas constant (R) [J/(mol·K)]:
+                    <input type="number" id="thermoR" value="8.314" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Mass (m) [kg]:
+                    <input type="number" id="thermoMass" value="1" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Specific heat (c) [J/(kg·K)]:
+                    <input type="number" id="thermoC" value="4184" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Initial temperature (T₁) [°C]:
+                    <input type="number" id="thermoTi" value="20" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Final temperature (T₂) [°C]:
+                    <input type="number" id="thermoTf" value="80" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Heat added (Q) [J]:
+                    <input type="number" id="thermoQ" value="0" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Temperature change (ΔT) [K]:
+                    <input type="number" id="thermoDeltaT" value="60" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateThermodynamics()">Calculate</button>
+            </div>
+            <div id="thermoResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="thermoOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Combinatorics Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Mode:
+                    <select id="comboMode" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="permutation">Permutation nP r</option>
+                        <option value="combination">Combination nC r</option>
+                        <option value="factorial">Factorial n!</option>
+                    </select>
+                </label>
+                <label style="display: block;">n (total elements):
+                    <input type="number" id="comboN" value="5" step="1" min="0" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">r (selected elements):
+                    <input type="number" id="comboR" value="3" step="1" min="0" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <div style="font-size: 10px; color: #555;">Use r only for permutations and combinations. Factorial mode ignores r.</div>
+                <button class="retro-button" onclick="calculateCombinatorics()">Calculate</button>
+            </div>
+            <div id="comboResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="comboOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
             <p style="font-weight: bold; margin: 0 0 10px 0;">Mechanical Work Calculator</p>
             <div style="display: grid; gap: 10px; font-size: 12px;">
                 <label style="display: block;">Formula:
@@ -3451,6 +3529,112 @@ function calculateContinuity() {
         result = 'v₁ ≈ ' + (A2 * v2 / A1).toFixed(6) + ' m/s';
     }
     document.getElementById('continuityOutput').innerText = result;
+}
+
+function calculateThermodynamics() {
+    let target = document.getElementById('thermoTarget').value;
+    let P = parseFloat(document.getElementById('thermoP').value);
+    let V = parseFloat(document.getElementById('thermoV').value);
+    let n = parseFloat(document.getElementById('thermoN').value);
+    let T = parseFloat(document.getElementById('thermoT').value);
+    let R = parseFloat(document.getElementById('thermoR').value);
+    let m = parseFloat(document.getElementById('thermoMass').value);
+    let c = parseFloat(document.getElementById('thermoC').value);
+    let Ti = parseFloat(document.getElementById('thermoTi').value);
+    let Tf = parseFloat(document.getElementById('thermoTf').value);
+    let Q = parseFloat(document.getElementById('thermoQ').value);
+    let deltaT = parseFloat(document.getElementById('thermoDeltaT').value);
+    let result = 'Error: insufficient or invalid inputs';
+    let deltaTfromTemps = !isNaN(Tf) && !isNaN(Ti) ? Tf - Ti : NaN;
+
+    if (target === 'pressure') {
+        if (!isNaN(n) && !isNaN(R) && !isNaN(T) && !isNaN(V) && V !== 0) {
+            result = 'P ≈ ' + (n * R * T / V).toFixed(6) + ' Pa';
+        }
+    } else if (target === 'volume') {
+        if (!isNaN(n) && !isNaN(R) && !isNaN(T) && !isNaN(P) && P !== 0) {
+            result = 'V ≈ ' + (n * R * T / P).toFixed(6) + ' m³';
+        }
+    } else if (target === 'moles') {
+        if (!isNaN(P) && !isNaN(V) && !isNaN(R) && !isNaN(T) && T !== 0) {
+            result = 'n ≈ ' + (P * V / (R * T)).toFixed(6) + ' mol';
+        }
+    } else if (target === 'temperature') {
+        if (!isNaN(P) && !isNaN(V) && !isNaN(n) && !isNaN(R) && n !== 0 && R !== 0) {
+            result = 'T ≈ ' + (P * V / (n * R)).toFixed(6) + ' K';
+        }
+    } else if (target === 'heat') {
+        let dt = !isNaN(deltaT) ? deltaT : deltaTfromTemps;
+        if (!isNaN(m) && !isNaN(c) && !isNaN(dt)) {
+            result = 'Q ≈ ' + (m * c * dt).toFixed(6) + ' J';
+        }
+    } else if (target === 'deltaT') {
+        if (!isNaN(Q) && !isNaN(m) && !isNaN(c) && m !== 0 && c !== 0) {
+            result = 'ΔT ≈ ' + (Q / (m * c)).toFixed(6) + ' K';
+        } else if (!isNaN(deltaTfromTemps)) {
+            result = 'ΔT = ' + deltaTfromTemps.toFixed(6) + ' K';
+        }
+    } else if (target === 'specificHeat') {
+        let dt = !isNaN(deltaT) ? deltaT : deltaTfromTemps;
+        if (!isNaN(Q) && !isNaN(m) && !isNaN(dt) && m !== 0 && dt !== 0) {
+            result = 'c ≈ ' + (Q / (m * dt)).toFixed(6) + ' J/(kg·K)';
+        }
+    }
+
+    document.getElementById('thermoOutput').innerText = result;
+}
+
+function factorialInteger(value) {
+    let n = Math.floor(value);
+    if (isNaN(n) || n < 0) return NaN;
+    let product = 1;
+    for (let i = 2; i <= n; i++) {
+        product *= i;
+    }
+    return product;
+}
+
+function permutation(n, r) {
+    n = Math.floor(n);
+    r = Math.floor(r);
+    if (isNaN(n) || isNaN(r) || n < 0 || r < 0 || r > n) return NaN;
+    let result = 1;
+    for (let i = 0; i < r; i++) {
+        result *= (n - i);
+    }
+    return result;
+}
+
+function combination(n, r) {
+    n = Math.floor(n);
+    r = Math.floor(r);
+    if (isNaN(n) || isNaN(r) || n < 0 || r < 0 || r > n) return NaN;
+    r = Math.min(r, n - r);
+    let result = 1;
+    for (let i = 1; i <= r; i++) {
+        result = result * (n - r + i) / i;
+    }
+    return result;
+}
+
+function calculateCombinatorics() {
+    let mode = document.getElementById('comboMode').value;
+    let n = parseFloat(document.getElementById('comboN').value);
+    let r = parseFloat(document.getElementById('comboR').value);
+    let output = 'Error: invalid input';
+
+    if (mode === 'factorial') {
+        let fact = factorialInteger(n);
+        output = isNaN(fact) ? output : 'n! ≈ ' + fact;
+    } else if (mode === 'permutation') {
+        let perm = permutation(n, r);
+        output = isNaN(perm) ? output : 'nP r ≈ ' + perm;
+    } else if (mode === 'combination') {
+        let comb = combination(n, r);
+        output = isNaN(comb) ? output : 'nC r ≈ ' + comb;
+    }
+
+    document.getElementById('comboOutput').innerText = output;
 }
 
 function calculateMechanicalWork() {
