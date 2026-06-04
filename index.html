@@ -157,7 +157,7 @@
         <span>SQRT_CONVERTER.EXE</span>
         <span style="background:#c0c0c0; color:black; padding: 0 3px; border:1px outset white;">X</span>
     </div>
-    <div class="window-body">
+    <div class="window-body" style="background: #c0c0c0; border: 2px inset #ffffff; padding: 10px;">
         
         <p>Convert a√b to √n:</p>
         <input type="number" id="coeffA" value="3" style="width: 40px;"> 
@@ -211,6 +211,15 @@
         <br>
         <button class="retro-button" onclick="approximateSqrt()">Approximate</button>
         <div id="sqrtApproxResult">Result: ?</div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
+        <p>Expression Simplifier</p>
+        Expression: <input type="text" id="simplifyInput" value="x^2 - 1" style="width: 220px;">
+        <br>
+        <button class="retro-button" onclick="simplifyExpression()">Simplify</button>
+        <div id="simplifyResult">Simplest form: <span id="simplifyOutput" style="font-weight: bold; color: #000080;">--</span></div>
+        <div id="simplifyValue">Value (fraction): <span id="simplifyValueFractionOutput" style="font-weight: bold; color: #000080;">--</span> — Decimal: <span id="simplifyValueDecimalOutput" style="font-weight: bold; color: #000080;">--</span></div>
         
         <hr style="border: 1px solid #808080; margin: 20px 0;">
         
@@ -277,6 +286,31 @@
         <br>
         <button class="retro-button" onclick="calculateTriangleLaw()">Calculate</button>
         <div id="lawResult">Result: ?</div>
+        
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 20px 0; padding: 10px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000; max-width: 860px;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Bretschneider's Formula Calculator</p>
+            <div style="display: grid; gap: 8px; font-size: 12px;">
+                <label style="display: block;">Side a:
+                    <input type="number" id="bretschA" value="5" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Side b:
+                    <input type="number" id="bretschB" value="6" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Side c:
+                    <input type="number" id="bretschC" value="5" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Side d:
+                    <input type="number" id="bretschD" value="6" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Sum of opposite angles (θ) [°]:
+                    <input type="number" id="bretschTheta" value="180" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <button class="retro-button" onclick="calculateBretschneider()">Calculate</button>
+            </div>
+            <div id="bretschResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Area: <span id="bretschOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
         
         <hr style="border: 1px solid #808080; margin: 20px 0;">
         
@@ -1327,6 +1361,263 @@ function approximateSqrt() {
     document.getElementById('sqrtApproxResult').innerText = "√" + n + " ≈ " + Math.sqrt(n).toFixed(6);
 }
 
+function simplifyExpression() {
+    let input = document.getElementById('simplifyInput').value.trim();
+    if (!input) {
+        document.getElementById('simplifyOutput').textContent = '--';
+        return;
+    }
+
+    // Preprocess: remove whitespace and normalize common LaTeX/Unicode tokens
+    let expr = input.replace(/\s+/g, '');
+    // Convert LaTeX fractions and roots to JS-like notation
+    expr = expr.replace(/\\frac\s*\{([^}]*)\}\s*\{([^}]*)\}/g, '($1)/($2)');
+    expr = expr.replace(/\\sqrt\s*\{([^}]*)\}/g, 'sqrt($1)');
+    expr = expr.replace(/√\s*\(?([^\)]*)\)?/g, 'sqrt($1)');
+    // normalize power operator
+    expr = expr.replace(/\^/g, '**').replace(/\+\-/g, '-').replace(/\-\+/g, '-').replace(/\-\-/g, '+');
+    // constants
+    expr = expr.replace(/\\pi|π/g, 'pi');
+    // treat standalone 'e' as Euler's number only when it's not adjacent to letters (basic heuristic)
+    expr = expr.replace(/(^|[^a-zA-Z0-9_])e([^a-zA-Z0-9_]|$)/g, '$1e_const$2');
+
+    function normNum(text) {
+        if (text === '' || text === '+') return 1;
+        if (text === '-') return -1;
+        return parseFloat(text);
+    }
+
+    // helpers for fraction and sqrt simplification
+    function gcd(a, b) {
+        a = Math.abs(a); b = Math.abs(b);
+        while (b) { let t = a % b; a = b; b = t; }
+        return a;
+    }
+    function simplifyIntFraction(n, d) {
+        if (d === 0) return null;
+        let g = gcd(n, d);
+        n = n / g; d = d / g;
+        if (d === 1) return String(n);
+        return n + '/' + d;
+    }
+    function extractSquareFactor(n) {
+        // find largest s such that s^2 divides n (for positive integers)
+        n = Math.abs(n);
+        let s = 1;
+        for (let k = 2; k * k <= n; k++) {
+            let p = k * k;
+            while (n % p === 0) {
+                s *= k;
+                n = n / p;
+            }
+        }
+        return {squareFactor: s, remainder: n};
+    }
+
+    let factorized = expr;
+    let speciallySimplified = false;
+
+    // Handle sqrt(n)/d  or (sqrt(n))/d   where n and d are integers
+    let m = expr.match(/^\(?sqrt\(([-+]?\d+)\)\)?\/(?:\(?)([-+]?\d+)(?:\)?)$/);
+    if (m) {
+        let n = parseInt(m[1], 10);
+        let d = parseInt(m[2], 10);
+        if (!isNaN(n) && !isNaN(d) && d !== 0) {
+            let sf = extractSquareFactor(n);
+            let s = sf.squareFactor;
+            let r = sf.remainder;
+            if (r === 1) {
+                // sqrt is integer
+                factorized = simplifyIntFraction(s, d) || (s/d).toString();
+            } else {
+                // (s*sqrt(r))/d , reduce s/d
+                let g = gcd(s, d);
+                let sn = s / g; let dn = d / g;
+                factorized = (sn === 1 ? '' : (sn + '*')) + '√' + r + (dn === 1 ? '' : '/' + dn);
+            }
+            speciallySimplified = true;
+        }
+    }
+
+    // Handle sqrt(n/m) -> simplify to (s1/s2)*sqrt(r1/r2) when n,m integers
+    if (!speciallySimplified) {
+        let m2 = expr.match(/^sqrt\(([-+]?\d+)\/([-+]?\d+)\)$/);
+        if (m2) {
+            let n = parseInt(m2[1], 10);
+            let d = parseInt(m2[2], 10);
+            if (!isNaN(n) && !isNaN(d) && d !== 0) {
+                let sf1 = extractSquareFactor(n);
+                let sf2 = extractSquareFactor(d);
+                let s1 = sf1.squareFactor; let r1 = sf1.remainder;
+                let s2 = sf2.squareFactor; let r2 = sf2.remainder;
+                // numeric coefficient
+                let num = s1; let den = s2;
+                let g = gcd(num, den);
+                num = num / g; den = den / g;
+                if (r1 === r2) {
+                    // sqrt(r1/r1) = 1
+                    factorized = simplifyIntFraction(num, den) || (num/den).toString();
+                } else {
+                    let coeff = (num === 1 && den === 1) ? '' : (num + (den === 1 ? '' : '/' + den) + '*');
+                    factorized = coeff + '√' + r1 + (r2 === 1 ? '' : ('/√' + r2));
+                }
+                speciallySimplified = true;
+            }
+        }
+    }
+
+    // Handle (a)/(sqrt(b)) where a,b integers
+    if (!speciallySimplified) {
+        let m3 = expr.match(/^\(?([-+]?\d+)\)?\/(?:\(?sqrt\(([-+]?\d+)\)\)?)$/);
+        if (m3) {
+            let a = parseInt(m3[1], 10);
+            let b = parseInt(m3[2], 10);
+            if (!isNaN(a) && !isNaN(b) && b !== 0) {
+                // rationalize: a/sqrt(b) = (a*sqrt(b))/b
+                let sf = extractSquareFactor(b);
+                let s = sf.squareFactor; let r = sf.remainder;
+                // a*sqrt(b) = a*s*sqrt(r)
+                let numeratorCoeff = a * s;
+                let denom = b / (s * s);
+                if (r === 1) {
+                    factorized = simplifyIntFraction(numeratorCoeff, denom) || (numeratorCoeff/denom).toString();
+                } else {
+                    let g = gcd(numeratorCoeff, denom);
+                    numeratorCoeff /= g; denom /= g;
+                    factorized = (numeratorCoeff === 1 ? '' : numeratorCoeff + '*') + '√' + r + (denom === 1 ? '' : '/' + denom);
+                }
+                speciallySimplified = true;
+            }
+        }
+    }
+
+    // Try numeric evaluation when expression contains only numbers/constants
+    try {
+        let numericTest = expr.replace(/pi/g, 'Math.PI').replace(/e_const/g, 'Math.E');
+        // replace 'sqrt(' with 'Math.sqrt(' for evaluation
+        numericTest = numericTest.replace(/sqrt\(/g, 'Math.sqrt(');
+        // only evaluate if the string contains only numbers, operators, Math., parentheses
+        if (/^[0-9\.\+\-\*\/\(\)\sMath\.ePIa-zA-Z_]+$/.test(numericTest)) {
+            let val = Function('return (' + numericTest + ')')();
+            if (Number.isFinite(val)) {
+                factorized = String(val);
+            }
+        }
+    } catch (e) {
+        // fall through to symbolic handling
+    }
+
+    // Handle simple algebraic patterns symbolically when numeric eval didn't fully simplify
+    // difference of squares: A**2 - B**2 => (A+B)(A-B)
+    if (factorized === expr) {
+        let diffSq = expr.match(/^([\w\)\(\/+\-*]+)\*\*2-([\w\)\(\/+\-*]+)\*\*2$/);
+        if (diffSq) {
+            let A = diffSq[1].replace(/\*\*/g, '^');
+            let B = diffSq[2].replace(/\*\*/g, '^');
+            factorized = '(' + A + '+' + B + ')(' + A + '-' + B + ')';
+        }
+    }
+
+    // quadratic factoring for ax**2 + bx + c where variable is x
+    let quad = expr.match(/^([+-]?(?:\d*\.?\d+|\d+)?)(?:x\*\*2)([+-](?:\d*\.?\d+|\d+))x([+-](?:\d*\.?\d+|\d+))$/i);
+    if (quad && factorized === expr) {
+        let a = normNum(quad[1]);
+        let b = parseFloat(quad[2]);
+        let c = parseFloat(quad[3]);
+        let D = b * b - 4 * a * c;
+        if (!isNaN(D) && D >= 0) {
+            let r1 = (-b + Math.sqrt(D)) / (2 * a);
+            let r2 = (-b - Math.sqrt(D)) / (2 * a);
+            let sign = x => x >= 0 ? '+' + Math.abs(x) : '-' + Math.abs(x);
+            if (a === 1) {
+                factorized = '(x' + sign(-r1) + ')(x' + sign(-r2) + ')';
+            } else {
+                factorized = a + '*(x' + sign(-r1) + ')(x' + sign(-r2) + ')';
+            }
+        }
+    }
+
+    factorized = factorized
+        .replace(/\*\*2/g, '^2')
+        .replace(/\*\*1\b/g, '')
+        .replace(/\b1\*/g, '')
+        .replace(/\*1\b/g, '')
+        .replace(/\+0\b/g, '')
+        .replace(/\b0\+/, '')
+        .replace(/\-0\b/g, '')
+        .replace(/\b0\*/g, '0')
+        .replace(/\*0\b/g, '0')
+        .replace(/\(\+?/g, '(')
+        .replace(/\+-/g, '-')
+        .replace(/\-\+/g, '-')
+        .replace(/\-\-/g, '+');
+
+    if (!factorized) {
+        factorized = input;
+    }
+
+    // restore e constant marker
+    factorized = factorized.replace(/e_const/g, 'e');
+    // pretty-print pi
+    factorized = factorized.replace(/pi/g, 'π');
+
+    document.getElementById('simplifyOutput').textContent = factorized;
+
+    // Attempt to compute numeric value and simplest fraction
+    let fracOut = document.getElementById('simplifyValueFractionOutput');
+    let decOut = document.getElementById('simplifyValueDecimalOutput');
+    fracOut.textContent = '--'; decOut.textContent = '--';
+
+    function floatToFraction(x, maxDen = 1000000, tol = 1e-12) {
+        if (!isFinite(x)) return null;
+        let sign = x < 0 ? -1 : 1;
+        x = Math.abs(x);
+        if (Math.abs(x - Math.round(x)) < tol) return (sign * Math.round(x)) + '/1';
+        let n = x;
+        let a0 = Math.floor(n);
+        let h0 = 1, k0 = 0, h1 = a0, k1 = 1;
+        let frac = h1 / k1;
+        if (Math.abs(frac - x) < tol) return (sign * h1) + '/' + k1;
+        while (k1 <= maxDen) {
+            n = 1 / (n - Math.floor(n));
+            let a = Math.floor(n);
+            let h2 = a * h1 + h0;
+            let k2 = a * k1 + k0;
+            h0 = h1; k0 = k1; h1 = h2; k1 = k2;
+            frac = h1 / k1;
+            if (Math.abs(frac - x) < tol || k1 > maxDen) break;
+        }
+        if (k1 > maxDen) return null;
+        return (sign * h1) + '/' + k1;
+    }
+
+    // If factorized looks like an integer fraction a/b
+    let simpleFracMatch = factorized.match(/^([-+]?\d+)\/([1-9]\d*)$/);
+    if (simpleFracMatch) {
+        let a = parseInt(simpleFracMatch[1], 10);
+        let b = parseInt(simpleFracMatch[2], 10);
+        let g = gcd(a, b);
+        a = a / g; b = b / g;
+        fracOut.textContent = a + '/' + b;
+        decOut.textContent = (a / b).toString();
+        return;
+    }
+
+    // Try to evaluate numerically
+    try {
+        let evalExpr = parseMathExpression(factorized.replace(/π/g, 'π').replace(/√/g, 'sqrt('));
+        // parseMathExpression returns a JS-ready string
+        let val = Function('return (' + evalExpr + ')')();
+        if (Number.isFinite(val)) {
+            let frac = floatToFraction(val, 1000000, 1e-12);
+            if (frac) fracOut.textContent = frac;
+            decOut.textContent = Number(val.toPrecision(12)).toString();
+        }
+    } catch (err) {
+        // leave outputs as '--'
+    }
+}
+
 function toggleInputs() {
     let method = document.getElementById('areaMethod').value;
     document.getElementById('sidesInputs').style.display = method === 'sides' ? 'block' : 'none';
@@ -1413,6 +1704,23 @@ function calculateTriangleLaw() {
         }
     }
     document.getElementById('lawResult').innerText = result;
+}
+
+function calculateBretschneider() {
+    let a = parseValue('bretschA');
+    let b = parseValue('bretschB');
+    let c = parseValue('bretschC');
+    let d = parseValue('bretschD');
+    let theta = parseValue('bretschTheta') * (Math.PI / 180);
+    let result = NaN;
+    if (!isNaN(a) && !isNaN(b) && !isNaN(c) && !isNaN(d) && !isNaN(theta)) {
+        let s = (a + b + c + d) / 2;
+        let term = (s - a) * (s - b) * (s - c) * (s - d) - a * b * c * d * Math.pow(Math.cos(theta / 2), 2);
+        if (term >= 0) {
+            result = Math.sqrt(term);
+        }
+    }
+    document.getElementById('bretschOutput').innerText = isNaN(result) ? 'Error' : result.toFixed(6);
 }
 
 function parseMathExpression(expr) {
