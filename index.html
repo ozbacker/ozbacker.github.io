@@ -3269,6 +3269,36 @@ function calculateOrbit() {
         </div>
         <hr style="border: 1px solid #808080; margin: 20px 0;">
         <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Percentage Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Mode:
+                    <select id="percentMode" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="partOfWhole">Find percent: part of whole</option>
+                        <option value="percentOf">Find value from percent</option>
+                        <option value="proportion">Find unknown by proportion</option>
+                    </select>
+                </label>
+                <label style="display: block;">Value (part or known amount):
+                    <input type="number" id="percentPart" value="14" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Base or whole value:
+                    <input type="number" id="percentWhole" value="30" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Known percent (for percent-of or proportion):
+                    <input type="number" id="percentKnown" value="31" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Target percent (for proportion):
+                    <input type="number" id="percentTarget" value="51" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <div style="font-size: 10px; color: #555;">Use "Find percent" for part/whole, "Find value" for percent-of-base, and "Find unknown by proportion" for one percent-to-value pair to another.</div>
+                <button class="retro-button" onclick="calculatePercentage()">Calculate</button>
+            </div>
+            <div id="percentResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="percentOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
             <p style="font-weight: bold; margin: 0 0 10px 0;">Mechanical Work Calculator</p>
             <div style="display: grid; gap: 10px; font-size: 12px;">
                 <label style="display: block;">Formula:
@@ -3635,6 +3665,31 @@ function calculateCombinatorics() {
     }
 
     document.getElementById('comboOutput').innerText = output;
+}
+
+function calculatePercentage() {
+    let mode = document.getElementById('percentMode').value;
+    let part = parseFloat(document.getElementById('percentPart').value);
+    let whole = parseFloat(document.getElementById('percentWhole').value);
+    let known = parseFloat(document.getElementById('percentKnown').value);
+    let target = parseFloat(document.getElementById('percentTarget').value);
+    let output = 'Error: invalid input';
+
+    if (mode === 'partOfWhole') {
+        if (!isNaN(part) && !isNaN(whole) && whole !== 0) {
+            output = part === 0 ? '0%' : (part / whole * 100).toFixed(6) + '%';
+        }
+    } else if (mode === 'percentOf') {
+        if (!isNaN(known) && !isNaN(whole)) {
+            output = (whole * known / 100).toFixed(6);
+        }
+    } else if (mode === 'proportion') {
+        if (!isNaN(part) && !isNaN(known) && !isNaN(target) && known !== 0) {
+            output = (part * target / known).toFixed(6);
+        }
+    }
+
+    document.getElementById('percentOutput').innerText = output;
 }
 
 function calculateMechanicalWork() {
