@@ -223,6 +223,62 @@
         
         <hr style="border: 1px solid #808080; margin: 20px 0;">
         
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Combinatorics Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Mode:
+                    <select id="comboMode" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="permutation">Permutation nP r</option>
+                        <option value="combination">Combination nC r</option>
+                        <option value="factorial">Factorial n!</option>
+                    </select>
+                </label>
+                <label style="display: block;">n (total elements):
+                    <input type="number" id="comboN" value="5" step="1" min="0" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">r (selected elements):
+                    <input type="number" id="comboR" value="3" step="1" min="0" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <div style="font-size: 10px; color: #555;">Use r only for permutations and combinations. Factorial mode ignores r.</div>
+                <button class="retro-button" onclick="calculateCombinatorics()">Calculate</button>
+            </div>
+            <div id="comboResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="comboOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        
+        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
+            <p style="font-weight: bold; margin: 0 0 10px 0;">Percentage Calculator</p>
+            <div style="display: grid; gap: 10px; font-size: 12px;">
+                <label style="display: block;">Mode:
+                    <select id="percentMode" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
+                        <option value="partOfWhole">Find percent: part of whole</option>
+                        <option value="percentOf">Find value from percent</option>
+                        <option value="proportion">Find unknown by proportion</option>
+                    </select>
+                </label>
+                <label style="display: block;">Value (part or known amount):
+                    <input type="number" id="percentPart" value="14" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Base or whole value:
+                    <input type="number" id="percentWhole" value="30" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Known percent (for percent-of or proportion):
+                    <input type="number" id="percentKnown" value="31" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <label style="display: block;">Target percent (for proportion):
+                    <input type="number" id="percentTarget" value="51" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
+                </label>
+                <div style="font-size: 10px; color: #555;">Use "Find percent" for part/whole, "Find value" for percent-of-base, and "Find unknown by proportion" for one known percent/value pair to another.</div>
+                <button class="retro-button" onclick="calculatePercentage()">Calculate</button>
+            </div>
+            <div id="percentResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
+                <div>Result: <span id="percentOutput" style="font-weight: bold; color: #000080;">--</span></div>
+            </div>
+        </div>
+        
+        <hr style="border: 1px solid #808080; margin: 20px 0;">
+        
         <p>Triangle Area Calculator</p>
         Method: <select id="areaMethod" onchange="toggleInputs()">
             <option value="sides">By sides (Heron's formula)</option>
@@ -3243,61 +3299,6 @@ function calculateOrbit() {
                 <div>Result: <span id="thermoOutput" style="font-weight: bold; color: #000080;">--</span></div>
             </div>
         </div>
-        <hr style="border: 1px solid #808080; margin: 20px 0;">
-        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
-            <p style="font-weight: bold; margin: 0 0 10px 0;">Combinatorics Calculator</p>
-            <div style="display: grid; gap: 10px; font-size: 12px;">
-                <label style="display: block;">Mode:
-                    <select id="comboMode" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
-                        <option value="permutation">Permutation nP r</option>
-                        <option value="combination">Combination nC r</option>
-                        <option value="factorial">Factorial n!</option>
-                    </select>
-                </label>
-                <label style="display: block;">n (total elements):
-                    <input type="number" id="comboN" value="5" step="1" min="0" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
-                </label>
-                <label style="display: block;">r (selected elements):
-                    <input type="number" id="comboR" value="3" step="1" min="0" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
-                </label>
-                <div style="font-size: 10px; color: #555;">Use r only for permutations and combinations. Factorial mode ignores r.</div>
-                <button class="retro-button" onclick="calculateCombinatorics()">Calculate</button>
-            </div>
-            <div id="comboResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
-                <div>Result: <span id="comboOutput" style="font-weight: bold; color: #000080;">--</span></div>
-            </div>
-        </div>
-        <hr style="border: 1px solid #808080; margin: 20px 0;">
-        <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
-            <p style="font-weight: bold; margin: 0 0 10px 0;">Percentage Calculator</p>
-            <div style="display: grid; gap: 10px; font-size: 12px;">
-                <label style="display: block;">Mode:
-                    <select id="percentMode" style="width: 100%; padding: 2px; font-family: monospace; font-size: 12px;">
-                        <option value="partOfWhole">Find percent: part of whole</option>
-                        <option value="percentOf">Find value from percent</option>
-                        <option value="proportion">Find unknown by proportion</option>
-                    </select>
-                </label>
-                <label style="display: block;">Value (part or known amount):
-                    <input type="number" id="percentPart" value="14" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
-                </label>
-                <label style="display: block;">Base or whole value:
-                    <input type="number" id="percentWhole" value="30" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
-                </label>
-                <label style="display: block;">Known percent (for percent-of or proportion):
-                    <input type="number" id="percentKnown" value="31" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
-                </label>
-                <label style="display: block;">Target percent (for proportion):
-                    <input type="number" id="percentTarget" value="51" step="any" style="width: 100%; background: #ffffff; border: 2px inset #ffffff; font-family: monospace; font-size: 12px; padding: 2px;">
-                </label>
-                <div style="font-size: 10px; color: #555;">Use "Find percent" for part/whole, "Find value" for percent-of-base, and "Find unknown by proportion" for one percent-to-value pair to another.</div>
-                <button class="retro-button" onclick="calculatePercentage()">Calculate</button>
-            </div>
-            <div id="percentResult" style="margin-top: 10px; font-size: 12px; background: #ffffff; border: 2px groove #ffffff; padding: 10px;">
-                <div>Result: <span id="percentOutput" style="font-weight: bold; color: #000080;">--</span></div>
-            </div>
-        </div>
-        <hr style="border: 1px solid #808080; margin: 20px 0;">
         <div style="background: #c0c0c0; border: 2px outset #ffffff; margin: 0 auto 20px auto; padding: 10px; max-width: 500px; font-family: 'MS Sans Serif', Arial, sans-serif; color: #000000;">
             <p style="font-weight: bold; margin: 0 0 10px 0;">Mechanical Work Calculator</p>
             <div style="display: grid; gap: 10px; font-size: 12px;">
@@ -4824,6 +4825,81 @@ function precedence(op) {
     return 4;
 }
 </script>
+<!-- Donation Button Trigger -->
+<div style="text-align: center; margin: 30px auto;">
+  <button onclick="openDonationModal()" style="background-color: #0056b3; color: white; border: none; padding: 14px 28px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: background 0.2s; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+    ☕ Buy me a coffee
+  </button>
+</div>
+
+<!-- Hidden Donation Modal -->
+<div id="donationModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <div style="background-color: #ffffff; padding: 30px; border-radius: 12px; max-width: 440px; width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;">
+    
+    <!-- Close Button -->
+    <button onclick="closeDonationModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 20px; cursor: pointer; color: #a0aec0;">&times;</button>
+    
+    <h3 style="color: #0056b3; margin-top: 0; font-size: 22px; margin-bottom: 10px;">Support this Math Suite</h3>
+    <p style="color: #4a5568; font-size: 14px; line-height: 1.5; margin-bottom: 20px;">
+      I am 15 years old and I wrote over 5,000 lines of code for this tool. Google AdSense rejected ads here due to the app layout, so if this suite helped you, feel free to support me directly via bank transfer:
+    </p>
+    
+    <!-- Beneficiary Info -->
+    <div style="margin-bottom: 15px; text-align: left; background: #f7fafc; padding: 12px; border-radius: 6px; border: 1px solid #edf2f7;">
+      <span style="font-size: 12px; color: #718096; display: block; margin-bottom: 2px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Beneficiary Name:</span>
+      <strong style="color: #1a202c; font-size: 15px;">[Your Full Name]</strong>
+    </div>
+
+    <!-- IBAN Info -->
+    <div style="margin-bottom: 20px; text-align: left; background: #f7fafc; padding: 12px; border-radius: 6px; border: 1px solid #edf2f7;">
+      <span style="font-size: 12px; color: #718096; display: block; margin-bottom: 2px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Bank Account (IBAN - BCR George):</span>
+      <div id="ibanText" style="font-family: monospace; font-weight: bold; font-size: 14px; color: #2d3748; letter-spacing: 1px; word-break: break-all; margin-top: 5px; background: #fff; padding: 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+        ROXX RNCB XXXX XXXX XXXX XXXX
+      </div>
+    </div>
+    
+    <p style="font-size: 11px; color: #a0aec0; margin-bottom: 20px; font-style: italic;">* Please mention "Donation" or "Support" in the payment details.</p>
+
+    <!-- Copy Button -->
+    <button onclick="copyIbanText()" id="modalCopyBtn" style="background-color: #0056b3; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px; width: 100%; transition: background 0.2s;">
+      Copy IBAN
+    </button>
+  </div>
+</div>
+
+<!-- JavaScript Logic -->
+<script>
+function openDonationModal() {
+  document.getElementById("donationModal").style.display = "flex";
+}
+
+function closeDonationModal() {
+  document.getElementById("donationModal").style.display = "none";
+}
+
+// Close modal if user clicks outside the box
+window.onclick = function(event) {
+  var modal = document.getElementById("donationModal");
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+function copyIbanText() {
+  var iban = document.getElementById("ibanText").innerText.trim();
+  navigator.clipboard.writeText(iban).then(function() {
+    var btn = document.getElementById("modalCopyBtn");
+    btn.innerText = "✓ IBAN Copied!";
+    btn.style.backgroundColor = "#38a169"; // Turns green on success
+    
+    setTimeout(function() {
+      btn.innerText = "Copy IBAN";
+      btn.style.backgroundColor = "#0056b3";
+    }, 2500);
+  }).catch(function(err) {
+    alert("Could not copy automatically. Please select and copy the text manually.");
+  });
+}
+</script>
 </body>
 </html>
-
